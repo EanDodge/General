@@ -1,0 +1,15 @@
+R-value reference. it can only take temp varibles
+
+you can have a move constructor
+
+you can also have a move assignment
+(String&&); 
+
+we can have constexpr double = 7.25 * 2;
+
+for *int &x : range) std:: cout << x << std::endl;
+
+auto i = 20;
+std::cout << i << std::endl;
+
+c++ is great- fucntional, precedreal, object oriented, fast, lambda

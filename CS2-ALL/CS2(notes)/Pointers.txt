@@ -1,0 +1,274 @@
+//Lecture 9 Pointers and Dynamic Memory
+
+memeory is a seqential list of locations(words)
+
+typically, only words are addressable - each word in memory has an address
+
+words are made up of one or more bytes, a byte is 8 bites
+
+modern are 64 bit words
+
+word siz typcally deines addressable RAM - addressess bus size
+
+
+
+varibles take up different space in memory
+
+an int type iso one word in size, with one bit for the sign
+
+A char typ is one byte. However a full word is allocated as this is what can be addressed
+
+memory can be allocated in blocks
+ -An Array of int [10] is 10 consecutive words in memory
+ - an array of char[10] is 10 consecutive bytes, 2 words (of 64bit) with 6 bytes unused - may not get an error if you try to use them
+ -a class with 4 int is 4 consecutive words in memory
+
+A pointer(int *ptr) is one word (unsigned int) - no matter the type
+
+each word had an address and some contents
+
+address typically given in hexidecimal (hex)
+
+every 4 bts is one hex digit 1111 == f (why we use hex)
+
+1 byte is 2 hex digits
+
+hex is way easier than showing the address in binary
+
+POINTERS
+address-of operator:&
+Dereference operator: *
+
+int x= 10; 
+int *ptr; can only point at integer
+ptr = &x; //now ptr == ff05(the address of x)
+*ptr = 20; //set what ptr points to to 20
+ptr = 0; //set ptr to point to nothing (null)
+         //Can only set to an address
+
+using pointers C-style
+-pointers to static objects are not overly useful except for C-stle call be reference
+
+void foo(int *x) {*x = 20}
+int main(){
+    int a = 10;
+    foo(&a)
+}
+using Poinetrs referenceing varibles
+-reference varibles are actually pointers, with some syntactic sugar
+int a;
+int &ref = a; // you do not have to use the derefernce operator when using reference operator
+//you also cannot change where they point to ever!!
+
+Call by reference
+Take advantag of reference varible
+void foo(int &x) {x = 20}
+int main(){
+    int a = 10;
+    foo(a);
+}
+
+returning a reference/ pointers
+-can return a reference 
+
+String& String::operator+=(const String &rhs){
+    ...
+    return *this;
+}
+int main(){
+    String a("abc");
+    cout <<a += "xyz";
+}
+can not return local varibles by reference
+can not return pooinetrs as locacl varivles
+arrays are poinets 
+
+int a [10], b[10];
+cant so a=b;
+
+allocation of memory for local objects
+art compile time the exact amount of memory needed foe local objects(varibles) can be detirmined - said to be statically allocated
+
+code is stored in the program block - along woth literals
+-local varibles, objevts and temporary objects are allocted memory on the call stack- in a stack frame
+ -base types: int, bool, float, etc 
+ -arrays: int[10]
+
+ dynammically allocated memory
+ what if you need more memory?
+ program block ze cannot changestack frame size,, for a fucntion, can not change during runtime
+ so dynammic memory is allocated on the (system) heap
+ the heap is managed by the os and blocks of memory can be allocated and deallcotaed to a given program
+
+use the new operator to allocate memory on the heap
+
+use the delete or delete[] operatory to deallocate
+
+operators new and delete
+//new returns an address of a memory of a memory//location on th heap
+int *ptr = new int; //a points to an int 
+ptr = 0;
+delete ptr; //release what ptr points at
+*ptr =20; //dangling pointer//error!!
+
+lecture 10 dynamic arrays pointers
+int n = 5;
+int *ptr = new[n]; // points to int[]
+*ptr = 10
+*(ptr +1) = 20; // pointer arithmetic
+*(ptr+2) = 30; //compiler does math
+ptr[3]=40 //[] works just like arrays 
+
+int n= 5;
+int *ptr = new int[n];//heap
+int a[5]//prpgram stack
+
+returning references/ poinets
+int* foo(){
+    int *ptr = new int[5];
+    return ptr;
+}
+
+int main(){
+    int *temp;
+    temp = foo();
+}
+
+assignment
+int n = 5;
+int *ptr1 = new int[n];
+int *ptr2 = new int[4];
+ptr1 = ptr 2; //no error, but memory leak
+
+we should delete ptr1 first
+delete[] ptr1;
+ptr1 = ptr2;
+
+2/20/23
+Varible sized array
+-int n;
+-cin >> n;
+-int a[n];
+
+Dynamic Array ADT
+-array of int
+-Allocate at run time
+- Support [] like regular array
+
+classes and dynamic momory
+-using dynamic memory requires the programmer ti manage that memory carefully 
+languages such as java and python manage the memory for you, but at a cost of effiencency
+assignment
+- Dearray
+we want a deep copy, not a shallow copy(not two pointers both pointing at the same array)
+copy semantics-copy constructor darray( const darray&)
+destructor ~darray();
+overload assignment operator 
+const time swap if possibly
+
+Golden rules:
+always have include guards
+defualt constructor
+have the big 4
+
+#ifndef DARRAY_HPP_
+#define DARRAY_HPP_
+
+class Darray {
+    public:
+                Darray   () : ptr(0), cap(0){};
+                Darray   (int);
+                ~Darray  ();
+                Darray   (const Darray&);
+        Darray& operator=(const Darray&);//one or the other // V1
+        Darray& operator=(Darray);                          //V2
+        void    swap     (Darray&); // for V2
+
+        int  operator[]  (int) const;
+        int& operator[]  (int);
+        int  capacity    ()    const { return cap; };
+        void resize      (int);
+
+    private:
+        int *ptr;
+        int cap;
+}
+
+
+#endif
+
+in .cpp file
+
+Darray::Darray(int n) : Darray() {
+    if (n<0)return;
+    cap = n;
+    ptr = new int[cap];
+}
+
+// NO returb, no params, no calls to exit()
+Darray::~Darray(){
+    delete[] ptr;
+}
+
+Darray::Darray(const Darray& actual){
+    cap = actual.cap;
+    ptr = new int[cap];
+    for(int i = 0; i<cap; ++i)
+        ptr[i]= actual.ptr[i];
+}
+
+Darray& Darray::operator=(const Darray& rhs){
+    if(ptr != rhs.ptr){
+        delete[] ptr;
+        cap = actual.cap;
+        ptr = new int[cap];
+        for(int i= 0; i < cap; ++i)
+            ptr[i] = actual.ptr[i];
+        }
+    return *this;
+    }
+}
+
+void Darray::swap(Darray& rhs){
+    int *tmp = ptr;
+    ptr = rhs.ptr;
+    rhs.ptr = temp;
+    int ctmp = cap;
+    cap = rhs.cap;
+    rhs.cap = ctmp;
+}
+
+Darray& Darray::operator=(Darray rhs){
+    swap(rhs);
+    return *this;
+}
+
+int Darray::operator[](int i)const {
+    assert(i>=0);
+    assert(i<cap);
+    return ptr[i];
+}
+int& Darray::operator[](int i){
+    assert(i>=0);
+    assert(i<cap);
+    return ptr[i];
+}
+
+//REQUIERS n>=0
+void Darray::resize(int newCap) {
+    int smaller = cap;
+    if (newCap < smaller) smaller = newCap;
+    cap = newCap;
+    int* tmp = new int[newCap];
+    for(int i = 0: i <smaller; ++i)
+        temp[i] = ptr[i];
+    
+    delete [] ptr;
+    ptr = tmp;//destructer only called on objects
+}
+
+
+
+problems with dynammic arrays - 
+to increase the size of the dynammiC ARRAY- it is very costly
+

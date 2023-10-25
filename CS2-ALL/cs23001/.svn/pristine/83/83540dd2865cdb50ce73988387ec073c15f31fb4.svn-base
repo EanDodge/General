@@ -1,0 +1,68 @@
+//implementation file
+//Ean Dodge
+#include<iostream>
+#include"bigint.hpp"
+
+//char constructor
+bigint::bigint(const char character[]) {
+    int i = 0;
+
+    while (character[i] != 0)
+        ++i;
+
+    int number;
+    for (int j = 0; j < i; ++j) {
+        number = int(character[j]) - int('0');
+        num[j] = number;
+    }
+}
+
+//int constrctor
+bigint::bigint(int ctor) {
+    for (int i = 0; i < capacity; ++i)
+    num[i] = 0;
+    int digit, i=0;
+    while (ctor != 0) {
+        digit = ctor % 10; //make digit the 1's place;
+        num[i] = digit;
+        ctor = ctor / 10;
+        ++i;
+    }
+}
+
+std::ostream& operator<<(std::ostream& out, bigint rhs) {
+    int j=0;
+    while (rhs.num[j] != 0)
+        ++j;
+
+    if (j > 80) {
+        for (int i = j; i > 80; --i)
+            out << rhs.num[i] << "|";
+        out << std::endl;
+        for (int i = 80; i >= 0; --i)
+            out << rhs.num[i] << "|";
+        out << std::endl;
+    }
+    else {
+        for (int i = j-1; i >= 0 ; --i)
+            out << rhs.num[i];
+        out << std::endl;
+    }
+    return out;
+}
+bool match(int a[], int b[]) {
+    return a = b;
+}
+
+bool bigint::operator==(bigint a) {
+    int j=0;
+    while (num[j] != 0)
+        ++j;
+    return match(num, a.num);
+
+}
+void bigint::debugPrint(std::ostream& out) const{
+    for(int i = capacity; i>=0; --i)
+    out<<num[i]<<"|";
+    out<<std::endl;
+}

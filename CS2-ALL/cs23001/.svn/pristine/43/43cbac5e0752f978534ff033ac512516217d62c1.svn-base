@@ -1,0 +1,20 @@
+#ifndef UTILITIES
+#define UTILITIES
+
+#include<iostream>
+#include "../string/string.hpp"
+#include "stack.hpp"
+
+String infix_to_postfix(std::istream& in, std::ostream& out);
+
+void printInfix(std::ostream& out, std::istream& in);
+
+String postfix_to_assembly(String, std::ostream&);
+
+bool isOperator(const String&);
+
+String evaluate(const String&, const String&, const String&, std::ostream&, int& n);
+
+String oper(const String&);
+
+#endif

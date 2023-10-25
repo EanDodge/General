@@ -1,0 +1,69 @@
+#include <iostream>
+#include "object_construction.hpp"
+
+Student::Student()
+{
+    name = new char[defaultSize];
+    age = 0;
+}
+int Student::length()
+{
+    int i = 0;
+    while (name[i] != 0)
+        ++i;
+    return i;
+}
+Student::Student(const char ch[], const int num)
+{ // constructor
+    int i = 0;
+    while (ch[i] != 0)
+        ++i;
+    name = new char[defaultSize];
+    age = num;
+    for (int j = 0; j < i; ++j)
+    {
+        name[j] = ch[j];
+    }
+}
+
+Student::~Student()
+{ // destructor
+
+    delete[] name;
+}
+
+Student::Student(const Student &rhs)
+{
+
+    age = rhs.age;
+    name = new char[defaultSize];
+    for (int i = 0; i < length(); ++i)
+        name[i] = rhs.name[i];
+}
+
+Student &Student::operator=(const Student &rhs)
+{
+    if (this == &rhs)
+    {
+        return *this;
+    }
+    else
+    {
+        age = rhs.age;
+        delete[] name;
+        name = new char[defaultSize];
+        for (int i = 0; i < length(); ++i)
+            name[i] = rhs.name[i];
+    }
+    return *this;
+    std::cout << this << ": I am " << rhs << " and i am " << age << std::endl;
+}
+std::ostream &operator<<(std::ostream &out, const Student &rhs)
+{
+    int i = 0;
+    while (rhs.name[i] != 0)
+        ++i;
+    for (int j = 0; j < i; ++j)
+        out << rhs.name[j];
+    return out;
+}

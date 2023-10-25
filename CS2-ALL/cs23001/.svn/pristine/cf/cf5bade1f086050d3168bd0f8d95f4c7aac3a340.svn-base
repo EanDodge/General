@@ -1,0 +1,21 @@
+#include <iostream>
+#include "object_construction.hpp"
+
+void value(const Student a)
+{
+    std::cout << a << std::endl;
+    std::cout << "########## value called ###########" << std::endl;
+}
+void reference(const Student &a)
+{
+    std::cout << "############# reference called #########" << std::endl;
+}
+int main()
+{
+    Student one("Lennice", 20);
+    Student two("Brandon", 19);
+
+    value(one);
+    reference(two);
+    one = two;
+}

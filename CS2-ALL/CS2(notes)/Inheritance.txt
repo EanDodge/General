@@ -1,0 +1,118 @@
+a class parent and a class child 
+parent has a public, protected, and a private
+
+child only public and private - but has a and access to a, has b accsess to b, but nothing to c
+
+class child : public parent {}
+
+the difference between public, protected, private is that publuc  you can access any where, 
+and protected/private are limited to where you can access. protected you can not do in a normal function
+like main just like provate, but you can access it in a child class. private you can not access it anywhere
+unless it is called from a publuc method
+
+constructors 0 base class ctor, then divided class ctor
+non-defualt ctors are not inherited and must be called explicitly 
+destructors - derived class dtotr, then base dtor 
+
+types of inheritance
+-publuc inheritance - when you derive a class, you can easily access the base varibles
+
+
+inheritance higharchy 
+-we use this to solve problems, spliting by attributes(like spliting attributes of car v truck)
+get more specific from top to bottom - EX. top is vehicle, then bottom to the car name. when going bottom up
+we can use a is-a relation ship. The f150 is-a truck. a truck is-a vehicle
+
+#pragma once
+#include<iostream>
+
+class shape { // abstract class 
+public:
+	shape() : x(0), y(0) {};
+    virtual ~shape() {};
+	void move(int nx, int ny) { x = nx; y = ny; };
+	virtual void draw() const = 0; //Pure vitural method 
+
+    virtual bool isRectangle() const = 0;
+    virtual bool isSquare() const = 0;
+    virtual bool isTriangle() const = 0;
+    virtual bool isCircle() const = 0;
+
+    
+protected:
+	int x, y;
+};
+
+class rectangle : public shape {
+public:
+	rectangle() : shape(), height(0), width(0) {};
+	rectangle(int h, int w) : shape(), height(h), width(w) {};
+	virtual void draw() const { std::cout << "Rectangle at " << x << " " << y << " size: " << height << "x" << width << std::endl; }
+	virtual bool isRectangle() const {return true;};
+    virtual bool isSquare() const {return false;};
+    virtual bool isTriangle() const{return false;};
+    virtual bool isCircle() const {return false;};
+protected:
+	int height, width;
+};
+
+class square : public rectangle {
+public:
+	square() : rectangle() {};
+	square(int w) : rectangle(w, w) {};
+	virtual void draw() const { std::cout << "Square at " << x << " " << y << " size: " << height << "x" << width << std::endl; };
+	virtual bool isRectangle() const {return true;};
+    virtual bool isSquare() {return true;};
+    virtual bool isTriangle() const {return false;};
+    virtual bool isCircle() const {return false;};
+};
+
+class triangle : public shape {
+public:
+	triangle() : shape(), height(0), base(0) {};
+	triangle(int h, int b) : shape(), height(h), base(b) {};
+	virtual void draw() const { std::cout << "Triangle at " << x << " " << y << " size: 1/2x" << height << "x"<< base << std::endl; };
+	virtual bool isRectangle() const {return false;;};
+    virtual bool isSquare() const {return false;};
+    virtual bool isTriangle() const{return true;};
+    virtual bool isCircle() const {return false;};
+
+protected:
+	int height, base;
+};
+class circle : public shape {
+public:
+	circle() : shape(), radius(0) {};
+	circle(int r) : shape(), radius(r) {};
+	virtual void draw() const { std::cout << "circle at " << x << " " << y << " size: " << radius << std::endl; };
+	virtual bool isRectangle() const {return false;;};
+    virtual bool isSquare() const {return false;};
+    virtual bool isTriangle() const{return false;};
+    virtual bool isCircle() const {return true;};
+protected:
+	int radius;
+};
+
+
+in main
+#include "inheritance.hpp"
+
+int main() { // this main does not work because of staic tope resolution, it does not like the shape pointer because it can be either one of the shapes
+	rectangle s1(5, 4);
+	s1.move(3, 7);
+	s1.draw();
+
+	shape* tbl[4];
+	tbl[0] = new square(2);
+	tbl[1] = new square(5);
+	tbl[2] = new rectangle(4, 3);
+	tbl[3] = new circle(4);
+
+	std::cout << "the shapes in tbl:" << std::endl;
+	for (int i = 0; i < 4; ++i) {
+		tbl[i]->draw();
+	}
+	for (int i = 0; i < 4; ++i) {
+		delete tbl[i];
+	}
+}

@@ -1,0 +1,129 @@
+constructors
+used to initilize objects
+replaces initilize mehtods and some set methods
+called at declaration implicitly
+you need a default constructor too because it can fail on you
+GOLDEN RULE
+Always define incilde gaurds for .hpp files
+Always have a defualt contructor
+
+code:
+class point{
+public:
+point(); // default ctor(constructor)
+point(double,double);  
+
+
+//out of line
+point::point(){
+x=0;
+y=0;
+}
+point::point(double nx, double ny){
+x=nx;
+y=ny;
+}
+
+
+//in main
+point c;//puts attributes to 0
+point a(3,4);
+c = point();
+a = point(4,8);
+c = a.add(b);
+c = a + b;
+
+
+you can overload almost every operator
+code:
+point point::operator+(point rhs){
+point result;
+result.x = x + rhs.x;
+result.y = y + rhs.y;
+ return result;
+}
+
+//main
+a = b.operator+(c);
+or
+a = b + c;
+//example
+a = point (4,8)
+b = point (2,10)
+
+point c;
+c = a + b;
+// c would be x = 6 y = 18
+
+//overloading subtraction is the same thing
+point point::operator-(point rhs){
+point result;
+result.x = x - rhs.x;
+result.y = y - rhs.y;
+return result;
+}//need to have in hpp file as well(prototype)
+
+//in main
+point d;
+d = a-b;
+
+//do not use a.print(std::cout);
+//we want std::cout << a << std::endl;
+
+//in header
+//void operator<<(std::ostream&);// dont want, be like a.operator<<(std::cout)
+
+//we will have to make a friend or free fucntion
+
+std::ostream& operator<<(std::ostream&, point);
+
+//in .cpp
+
+std::ostream& operator<<(std::ostream& out, point rhs){
+out<< "(" << rhs.getx() << ", " << rhs.gety() << ")";
+return out;
+}
+
+//method v function
+a mehtod is invoked on an object of a class
+a function is just called(freely)
+
+//in main
+//you can use
+operator<<(std::cout, a);
+//or
+std::cout<< a;
+
+// what does return out do?
+an ostream like cout fout are pointers
+it points to the place it is going to print next, thats why we return the last point of the ostream
+std::cout a << "x";
+or 
+operator<<(operator<<(std::cout, a), "x");
+//make sure std::ostream had a &;
+
+you can make the operator << a friend function, then we can use private varibles, but that access to a private 
+varible that we dont want. since we have getx and gety, we can just use them
+
+std::istream& operator>>(std::istream& in, point &rhs){
+doble tempy, tempx;
+in>> temx >> tempy;
+rhs = point ( temx, tempy);
+return in;
+}
+//in main
+
+std::cin>> a;//simple, would like two doubles
+
+//1/30/23
+You can think of am array any way you want.
+you can have it
+12345678
+43587685
+or
+87654321
+58678534
+if addition number is bigger than 10, have a carry
+there is a null terminating character at the end of the char array \0
+search till you find \0
+the character '0' is not the number 0

@@ -1,0 +1,58 @@
+infix: (2+3)
+postfix:23 +
+prefix: + 2 3
+
+there are programming languages that are prefix, some are postfix
+compilers take care of the conversion
+
+FOURTH (an old HP) calculators use post fix
+3 4 +, results 7 being on the top of the top of the stack in FOURTH
+
+lisp is prefix
+ - (+ 3 4) returns 7, (*(+3 4) 2) returns 14///great for exam!!!!!!!
+
+ 2+3+4*6*6-4+7
+ //parenthesis
+ ((((2+3)+((4*6)*6))-4)+7)
+ ((((2 3 +) +((4 6*)*6))4)7+)
+ 
+ 2*3*5+6-7*4+5-8
+ (((((2*3)*5)+6)-(7*4))+5)-8)
+ ((((2 3*)5*)6+)(7 4*)-)5+)8-)
+ -+-+**2 3 5 6* 7 4 5 8 // prefix  
+2 3 5 6 7 4* 5 8- + - + **
+
+algorithm pre
+expr; // given fully parenthesized infix expression
+Stack S;
+while(not odne with expression) {
+    t = nextToken(expr);
+    if(t ==')'{
+        rhs = S.pop();
+        op = S.pop();
+        lhs = S.pop();
+        S.push( rhs + lhs + op );
+        } else if (t != '('){
+            S.push(t);
+        }
+        return S.pop();
+    }
+}
+
+pre to post
+expr; // given fully parenthesized infix expression
+Stack S;
+while(not odne with expression) {
+    t = nextToken(expr);
+    if(operator(t)){
+        rhs = S.pop();
+        op = S.pop();
+        
+        S.push( EVAL(rhs + lhs + op ));
+        } else 
+            S.push(t);
+        }
+        return S.pop();
+    }
+}
+

@@ -1,0 +1,43 @@
+building a profiler
+
+-need to auto insert counters(source code) to keep tack of how many times a statment (line) has been executed
+
+x= x+ 1; (insert foo)
+
+need to fins all statment that are to be profiled
+expression staements - calls, assignments, operations
+
+need to parse the source code to find all these staements
+parsing the code results in an Abstact Syntax Tree
+Need to search the tree for the statements
+The most difficult part of building a profiler is the parsing
+c++ is very difficult to parse
+
+will use a parsing took call srcML - generates an AST in XML
+srcML.org
+very robust
+just taverse the tree and add nodes
+will need to know where the name of the function is
+We care about the expresion statements
+
+class AST{//does heavy lifting
+    public:
+    AST();
+    //build constructor, and destructor
+    //m2 heavy
+};
+
+class srcML{ //like the btree
+    public:
+    srcML () : tree(0){};
+    ~srcML () {delete tree;};
+    srcML(const srcML&);
+    void swap (srcML&);
+
+}
+
+//try to understand read function
+
+m2 
+we will be inserting nodes into the tree
+p- file is profiler file

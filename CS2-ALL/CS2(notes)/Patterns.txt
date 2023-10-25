@@ -1,0 +1,60 @@
+class wordProcessor {
+public:
+    wordProcessor ():width(20) {};
+
+};
+
+class format{
+public:
+    format(int w);
+    void output(){
+        std::string line,word;
+        std::ifstream inFile("quote.txt);
+
+        inFile >>word;
+        line = word;
+        while(inFile >> word){
+            if(line.length() + word.length() + 1 > width){
+                justify(line);
+                line = "";
+            }
+            if(line =="") 
+                line = word;
+            else
+                line = line + " " + word;
+            } 
+            justify(line);
+            line = "";
+            inFile.close();
+    };
+protected:
+    unsigned int width;
+private: 
+    virtual void justify(const std::string&) = 0;
+};
+
+
+class LeftJustify: public format{
+public:
+    LeftJustify(int w): format(w) {};
+private:
+    virtual void justify(const std::string&) = 0;
+};
+
+class RightJustify: public format{
+public:
+    RightJustify(int w): format(w){};
+private:
+    virtual void justify(const std::string&) = 0;
+};
+
+class CenterJustify: public format{
+public:
+    CenterJustify(int w): format(w){};
+private:
+    virtual void justify(const std::string&) {
+        for(unsigned int i = 0; i < (wodth - line.length()) / 2; ++i)
+            std::cout << " ";
+        std::cout << line << std::endl;
+    }
+};

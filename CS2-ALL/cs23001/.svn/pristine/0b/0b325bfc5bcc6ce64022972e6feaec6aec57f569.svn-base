@@ -1,0 +1,18 @@
+#include<iostream>
+#include"stack.hpp"
+#include"../string/string.hpp"
+#include<cassert>
+
+int main(){
+    {
+        stack<String> S;
+    stack<int> I;
+    stack<double> D;
+    stack<float> F;
+    stack<char> C;
+    stack<String> str;
+    std::cout<<"all types have been implemented"<<std::endl;
+    }
+
+    std::cout<< " Done testing defualt ctor"<<std::endl;
+}

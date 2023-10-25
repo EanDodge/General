@@ -1,0 +1,50 @@
+#include<iostream>
+#include"stack.hpp"
+#include"../string/string.hpp"
+#include<cassert>
+
+int main(){
+    {
+        String S("hello there");
+        String H("!!!!!");
+        stack<String> str;
+        str.push(S);
+        str.push(S);
+        str.push(S);
+        str.push(H);
+        stack<String> str1;
+        str1 = str;
+        std::cout<< str.top() <<std::endl;
+    }
+    {
+        String S("HELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOHHHHHHHHHHHHHHHHOEEEEEEEEEEEEEEHHHHHHHHHHHHHHHHHF");
+        String H("!!!!!");
+        stack<String> str;
+        int i = 0;
+        str.push(S);
+        str.push(S);
+        str.push(S);
+        str.push(H);
+        while(i < 10){
+            str.push(S);
+            ++i;
+        }
+        stack<String> str1;
+        str1 = str;
+        std::cout<< str.top()<<std::endl;
+    }
+    {
+        String S;
+        int i = 0;
+        stack<String> str;
+        while ( i < 1000){
+            str.push(S);
+            ++i;
+        }
+        stack<String> str1;
+        str1 = str;
+        
+    }
+    std::cout<<"Done testing assign"<<std::endl;
+    
+}

@@ -1,0 +1,11 @@
+Explanation:
+It is the operator function for the vector. There are a few reasons that this function took up alot of time in the algorithm.
+The first reason is that the operator was called over a trillon times! It was called many times in the bubble sort program to get 
+the index of a vector to move numbers around. For example, for each vector being sorted, it would have to go through the vector many
+times to sort each number around. If the bubble sort function is going through the vector many times, and the size of the vector is 100, 
+then it could be looking at over a thousand calls.
+ 
+The second reason that it takes the most time is because in the function bubble sort, it will have multiple calls in just one line. 
+For example, in the file "sort_lib.cpp" lines 113 and 115, the operator is being called twice on each line, which is also a reason for 
+the many function calls. In conclusion, this function took up so much time because of it being called multiple times on one line, and 
+this racked up over a trillon calls. This function took almost 45% of the time, which is a really high number compared to the other functions.

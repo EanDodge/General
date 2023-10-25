@@ -1,0 +1,18 @@
+#include<iostream>
+#include"stack.hpp"
+#include"../string/string.hpp"
+#include<cassert>
+
+
+
+int main() {
+    stack<int> S;
+    copyctor(S);
+    stack<String> ch;
+    copyctor(ch);
+    stack<char> st;
+    copyctor(st);
+    stack<double> dou;
+    copyctor(dou);
+    std::cout<<"Done testing copy ctor"<<std::endl;
+}

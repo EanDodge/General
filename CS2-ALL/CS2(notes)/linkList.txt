@@ -1,0 +1,134 @@
+arrays can be very costly
+Linked lists;
+-need a more flexable container/collection data structure that can change in size efficently
+-add memory as needed
+Node class--
+template<typename T>
+class node{
+public:
+    node() : next(0) {};
+    node(const T& item) : data(item), next(0) {};
+    T data;   // the data (element)
+    node<T>* next; //pointer to a node
+// ptr ->next = new node(6); does the same thing as (*ptr).next = new node(6);
+}
+
+
+template <typename T>
+class stack {
+public:
+    stack() : tos(0) {};
+    stack(conat stack<T>&);
+    ~stack();
+    void swap(stack<T>&);
+    stack<T>& operator= (stack<T> rhs){ swap(rhs); return *this;};
+
+    bool isEmpty() const { return tos == 0;};
+    bool isFull() const;
+
+    void push(const T&);
+    T pop();
+    T top() const { assert(!isEmpty()); return tos ->data; };
+private:
+    node<T> *tos;
+}
+
+
+//push
+// requires: tos-> x1 -> x2 -> ...xn->0
+// ensures: tos-> item -> x1 -> x2 -> ...xn->0
+template <typename T>
+void stack<T>::push(const T& item){
+    assert(!isFull());
+    node<T> *temp = new node<T>(item);
+    temp ->next = tos;
+    tos = temp;
+}
+
+//pop
+//requires: tos != 0 || tos -> x1 -> x2 -> ... xn->0
+//ensures: tos-> x2 -> ... xn->0
+template<typename T>
+T stack<T>::pop(){
+    assert(!isEmpty());
+    T result = tos->data;
+    node<T> *temp = tos;
+    tos = tos->next;
+    delete temp;
+    return result;
+}
+
+template <typename T>
+stack<T>::~stack(){
+    node<T> *temp = 0;
+    while(tos != 0){
+        temp = tos;
+        tos = tos->next;
+        delete temp;
+    }
+}
+
+template <typename T>
+stack<T>::stack(const stack<T> &actual) : stack<T>() { copy constructor
+    node<T> *temp = actual.tos;
+    node<T> *bottom;
+    while (temp != 0){
+        if (tos == 0){
+            tos = new node<T>(temp -> data);
+            bottom = tos;
+        }else{
+            bottom->next = new node<T>(temp->data);
+            bottom = bottom->next;
+        }
+        temp = temp->next;
+    }
+}
+
+template <typename T>
+void stack<T>::swap(stacl<T> &rhs){
+    node<T> *temp = tos;
+    tos = rhs.tos;
+    rhs.tos = temp;
+}
+
+template <typename T>
+stack<T>& stack::operator=(const stack& rhs){
+    stack<T> temp = rhs;
+    swap (rhs);
+}
+
+#include<new>
+template <typename T>
+bool stack<t>:: isFull() const {
+    node<T> *temp = new(std::nothrow) node<T>();
+    if (temp == 0) return true; //out of memory
+    delete temp;
+    return false;
+}
+
+
+
+
+
+
+
+
+//how to delete- 
+node<int> *ptr;
+ptr = new node(6);
+ptr ->next = new node(7);
+delete ptr->next;
+//Stack ADT
+-filo
+pointer TOS;
+Which end is TOS?
+tos->next = new node();
+tos = tos ->next;
+//no
+
+you need a temp;
+temp = new node();
+temp ->next = tos;
+tos = temp;
+
+

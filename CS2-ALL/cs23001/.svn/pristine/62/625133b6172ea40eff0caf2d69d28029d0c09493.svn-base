@@ -1,0 +1,31 @@
+#include "string.hpp"
+#include <iostream>
+#include <cassert>
+#include <vector>
+
+int main()
+{
+    {
+        String A("ab c");
+        std::vector<String> S;
+        S = A.split(' ');
+        assert(S[0] == "ab");
+        assert(S[1] == "c");
+    }
+    {
+        String A;
+        std::vector<String> S;
+        S = A.split(' ');
+        assert(S[0] == "");
+    }
+    {
+        String A("hello how are you doing today, because i am doing great");
+        std::vector<String> S;
+        S = A.split(' ');
+        assert(S[0] == "hello");
+        std::cout<<"PRINTING THE VECTOR: ";
+        for(auto i = 0; i < S.size(); ++i){
+            std::cout << S[i] << std::endl;
+        }
+    }
+}

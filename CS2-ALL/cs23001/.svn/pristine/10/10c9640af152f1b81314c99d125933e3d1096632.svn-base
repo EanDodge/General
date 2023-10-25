@@ -1,0 +1,25 @@
+ 13:07:18 up 21 days, 20:23, 23 users,  load average: 0.37, 0.92, 1.02
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+khood5   pts/0    10.37.0.30       Wed14    5days  0.08s  0.08s -bash
+mallouzi pts/1    131.123.38.187   Fri11    4days  0.07s  0.07s -bash
+mallouzi pts/2    131.123.38.187   Fri12    4days  0.12s  0.12s -bash
+dtinley  pts/6    10.22.26.161     12:57    5.00s  0.18s  0.18s -bash
+rsilvey1 pts/9    10.32.0.153      12:01   35:29  20.80s 20.37s emacs diff.cpp
+hharbiso pts/10   10.32.0.146      12:52    1:18   0.08s  0.08s -bash
+dsicher  pts/18   10.32.0.142      12:05    3.00s  0.69s  0.11s nano diff.cpp
+ehager2  pts/20   10.32.0.215      12:26    6.00s  0.86s  0.86s -bash
+bweiss6  pts/21   10.22.18.246     12:16   30.00s  0.23s  0.23s -bash
+jbutkov3 pts/22   10.22.42.85      12:17    5:58   0.33s  0.33s -bash
+chartm23 pts/24   10.22.33.3       12:20    5.00s  0.18s  0.18s -bash
+jeckert5 pts/23   10.22.25.171     12:38    2:50   0.19s  0.19s -bash
+etemple2 pts/25   10.32.0.209      12:26   14.00s  0.18s  0.18s -bash
+lbolton3 pts/31   10.22.51.18      12:27    6.00s  0.21s  0.01s nano my_name_is.cpp
+bsainiak pts/28   10.22.51.44      12:27    5.00s  0.17s  0.17s -bash
+bscholte pts/29   10.32.0.216      12:27   38.00s  0.28s  0.28s -bash
+nhardima pts/34   10.22.51.19      12:30   29:52   0.08s  0.08s -bash
+csteve54 pts/35   10.32.0.204      12:28    2:29   0.17s  0.17s -bash
+edodge5  pts/30   10.22.51.56      12:28    5.00s  0.24s  0.03s w
+shall89  pts/32   10.32.0.203      12:29    6.00s  0.23s  0.23s -bash
+ckamda   pts/33   10.32.0.222      12:29   22.00s  0.34s  0.05s svn commit -m svn practice
+sjorda24 pts/36   10.22.49.121     12:41    2:38   0.27s  0.27s -bash
+rsilvey1 pts/37   10.32.0.153      12:32    2.00s  0.45s  0.45s -bash

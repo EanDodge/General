@@ -1,0 +1,34 @@
+problems with linked list
+it is a sequential container
+can only add/delete at one end, only add on the other end
+can not easuly rempove/insert a node in the middle- nee a pointer to the previous node
+can onlu search
+
+double-linked list
+add another pointer to the pervious node (*next, *prev)
+beginning has a previous === 0
+endning has a next == 0
+
+add a node/remove a node this way
+
+how to remove
+
+ptr-> next-> prev = ptr->prev;
+ptr-> prev-> next = ptr->next;
+delete ptr;
+
+
+want a list to go foward and backwards
+can add and remove a node
+can no allow access to the list via dnode - could easily break rules of usage
+need another data type that abstracts the dnode- an iterator
+container/iterator is a typical 00 design oattern for ADTs. The STL make heavy use of abstaction;
+two classes workinng together, in collaboration, to solve a problem;
+
+list and iterator work together;
+methods inn list return itr objects
+itr objects have access to the nodes in a list
+Traverse(iterate) over a list vis itr objects
+List<int> lstl
+lst.insertAfter(lst.end(),20)
+

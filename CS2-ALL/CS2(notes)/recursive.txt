@@ -1,0 +1,81 @@
+//nothing really special
+uses same exact kind of function calling
+a call stack is used to implement fucntion calls
+when a fucntion called
+-values of local varibles are saved
+-values of parameters are saved
+-return address is saved;
+All this is pushed onto the call stack and the new function invoked
+
+program counter is a register that points to the address in memory that is being executed
+stack pointer points to the top of tha call stack
+stack frame is composed of a callees locals, parametrs abd the return address
+when a call is made, a stack frame is constructed and pushed onto the call stack
+then the address of the function being called is put into the PC
+when the function ends, the return address is put back into the PC
+
+//takehome- we have a stack frame and we can store things inside that
+//only one thing can be ran at a time in the CPU
+
+fib code;
+
+int nfact(int n){
+    if(n<=1)
+        return 1;
+    else
+        return n*nfact(n-1);
+}
+
+int fib(int n){
+    if(n<= 2)
+        return 1;
+    else    
+        return fib(n-1)+fib(n-2);
+}
+
+move(n,sorce,auxilary,target)
+if n>1
+-move(n-1,sorce,tare -- )slides
+
+enum poleName {left,right,middle}
+
+class pole {
+    public:
+    pole()'
+    pole(poleName x):p(x){};
+    friend std::ostream& operator<<(std::ostream& out, pole rhs);
+    private:
+    poleName p;
+}
+
+std::ostream& operator<<(std::ostream& out, pole rhs){
+    switch(rhs.p){
+        case left: out<<"left"; break;
+        case right: out<<"right";break;
+        case middle : out<<"middle";
+    }
+    return out;
+}
+
+void move(int n, pole src, pole temp, pole dest){
+    if(n <= 1){
+        std::cout<<"move disk from "<< src << " to "<<dest<< std::endl;
+    }
+    else{
+        move(n-1,src,dest,temp);
+        std::cout<<"move disk from "<< src << " to "<<dest<< std::endl;
+        move(n-1,temp,src,dest);
+    }
+}
+
+
+
+
+int main(){
+    int n= 1;
+    std::cout<<"towers of HANOI"<<std::endl;
+    cin>>n;//how many?
+    std::cout"to solve with"<<n<< "disks, make the following moves."<<std::endl;
+    move(n,left, middle, right);
+}
+

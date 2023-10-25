@@ -1,0 +1,38 @@
+Stacks
+Stacks are another collection of objects with rules of usage on how to add, remove and access the elements
+other containers include set,string,array,vector,etc.
+a set specifies 
+
+Stacks - First in last out(filo)
+push a plate on, pop it off
+Stack ADT
+
+include guards
+#include<cassert>
+const int SIZE = 100;
+
+template <typename T>
+class stack {
+public:
+         stack() : tos(-1){};
+    bool isEmpty() const {return tos == -1;};
+    bool isFull () const {return tos == SIZE - 1;};
+    void push(const T&);
+    T    pop();
+    T    top() const; {return s[tos];};
+
+private:
+    int tos;
+    T s[SIZE];
+};
+
+template<typename T>
+void stack<T>::push(const T& item){
+    assert(!isFull()); //check for stack overflow
+    s[++tos] = item;
+}
+template<typename T>
+T stack<T>::pop(){
+    assert(!isEmpty()); //check for stack underflow
+    return s[tos--];
+}

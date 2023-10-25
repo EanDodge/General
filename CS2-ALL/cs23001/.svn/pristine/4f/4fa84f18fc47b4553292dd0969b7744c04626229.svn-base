@@ -1,0 +1,33 @@
+//Ean Dodge
+//Bigint
+//cs23001
+
+#ifndef BIGINT_HPP
+#define BIGINT_HPP
+// class bigint and its methods
+// cs23001
+// bigint program
+// Ean Dodge
+#include <iostream>
+const int CAPACITY = 160;
+
+class bigint
+{
+public:
+    bigint();
+    bigint(const char[]);
+    bigint(int ctor);
+    int findSize();
+    friend std::ostream &operator<<(std::ostream &, bigint);
+    friend std::istream &operator>>(std::istream &in, bigint &);
+    bool operator==(bigint);
+    void debugPrint(std::ostream &) const;
+    int operator[](int) const;
+    int& operator[](int);
+    bigint operator+(const bigint &rhs) const;
+
+private:
+    int bigintArray[CAPACITY];
+};
+
+#endif

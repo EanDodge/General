@@ -1,0 +1,12 @@
+#ifndef UTILITIES
+#define UTILITIES
+
+#include<iostream>
+#include "../string/string.hpp"
+#include "stack.hpp"
+
+String infix_to_postfix(std::istream& in);
+
+void printInfix(std::ostream& out, std::istream& in);
+
+#endif

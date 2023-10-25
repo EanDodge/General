@@ -1,0 +1,216 @@
+//requieres: assignable(T)
+//
+//
+//                -----------------
+//                |    data       |
+//                -----------------
+//                |    next->     |
+//                 ----------------
+//                |    <- prev    |
+//                -----------------
+//
+
+template <typename T>
+class dnode {
+public:
+    dnode() : next(0), prev(0) {};
+    dnode(const T& x) : data(x), next(0), prev(0) {};
+    T data;
+    dnode<T> *next,
+              *prev;
+};
+
+template <typename T> class List; //Foward - there is a list class
+
+template <typename T> 
+class Itr {
+public:
+    Itr() : current(0) {};
+    Itr(dnode<T>* ptr) : current(ptr) {};
+
+    Itr<T>& operator++() { 
+        if (current) current = current->next; 
+        return *this;
+    }; //++i
+    Itr<T> operator++(int) { 
+        Itr<T> result(current);
+        if(current) current = current->next;
+        return result;
+    }; //i++
+    Itr<T>& operator--() { //--i
+        if (current) current = current->prev;
+        return *this;
+    };
+    Itr<T> operator--() {//i--
+        Itr<T> result(current);
+        if(current) current = current->prev;
+        return result;
+    }; //i--
+    bool operator==(Itr<T> rhs) const { return current == rhs.current; };
+    bool operator!=(Itr<T> rhs) const { return current != rhs.current; };
+
+    T  operator*() const { return current->data; };
+    T& operator*() const { return current->data; };
+
+    //must be a method(no free function)
+    //must return a pointer (or object of the class)
+    const dnode<T>* operator->() const { return current;};
+    dnode<T>*       operator->()       { return current;};
+    const dnode<T>* getCurrent() const { return current;};
+
+
+    friend class List; //List can access private of Itr;
+
+private:
+    dnode<T> *current
+};
+
+
+template <typename T>
+class List {
+public:
+                 List() : beginning(0), endning(0) {};
+                 ~List();
+                 List(const List<T>&);
+    void         swap(      List<T>&);
+    List<T>&     operator=(list<T> rhs){ swap(rhs); return *this;};
+    bool         isEmpty()       const { return beginning == 0;};
+    bool         isFull()        const; //allocate a dnode
+    int          length()        const;
+    const Itr<T> operator[](int) const;
+    Itr<T>&      operator[](int);
+    const Itr<T> find(const T&)  const;
+    Itr<T>       find(const T&);
+    const Itr<T> begin() const {return Itr(beginning); };
+    Itr<T>       begin()       {return Itr(beginning); };
+    const Itr<T> end()   const {return Itr(endning); };
+    Itr<T>       end()         {return Itr(ending); };
+    T            front() const {return beginning->data;};
+    T&           front()       {return beginning->data;};
+    T            back()  const {return ending->data;};
+    T&           back()        {return endning->data;};
+
+    void         insertBefore(Itr<T>, const T&);
+    void         insertAfter (Itr<T>, const T&);
+    void         remove      (Itr<T>);
+
+    const Itr<T> begin() const {return Itr(begining);}
+private:
+    dnode<T>     *beginning;
+    dnode<T>     *ending;
+};
+
+template <typename T>
+int List<T>::length() const {
+    Itr<T> ptr = beginning;
+    int    len = 0;
+    while  (ptr != 0){
+        ++ptr;
+        ++len;
+    }
+    return len;
+}
+
+template <typename T>
+void List<T>::insertBefore(Itr<T> ptr, const T& item){
+    dnode<T> *temp = new dnode(item);
+    if(beginning == 0){
+        beginning = temp;
+        endning = temp;
+
+    }else if( ptr == beginning) {
+        temp->next = beginning;
+        beginning = temp;
+    }else{
+        temp->next = ptr.current;
+        temp->prev = ptr->prev;
+        ptr->prev->next = temp;
+        ptr->prev = temp;
+    }
+}
+
+template <typname T>
+void List<T>::insertAfter(Itr<T> ptr, const T&item){
+    dnode<T> *temp = new dnode<T>(item);
+    if (ending == 0) {
+        beginning = temp;
+        ending = temp;
+    }else if (ptr == ending){
+        ptr->next = temp;
+        temp->prev = ending;
+        ending = temp;
+    }else{
+        temp->next = ptr->next;
+        temp->prev = ptr.current;
+        ptr->next->prev = temp;
+        ptr->next = temp;
+    }
+}
+
+template <typename T>
+void List<T>::remove(Itr<T> ptr){
+    if(isEmpty()) return;
+    if (ptr == 0) return;
+    if (ptr == beginning) {
+        beginning = beginning->next;
+    }else{
+        ptr->prev->next = ptr->next;
+    }
+    if(ptr == ending){
+        ending = ending->prev;
+    }else{
+        ptr->next->prev = ptr->prev;
+    }
+    delete ptr.current;
+}
+
+template <typename T>
+Itr<T>& List<T>::operator[](int n){
+    if (n<0) return Itr<T>();
+    Itr<T> result = beginning;
+    int i = -;
+    while((i < n) && (result != 0)){
+        ++result;
+        ++i;
+    }
+    return result;
+}
+
+template <typename T>
+List<T>::~List() {
+    dnode<T> *temp;
+    while(beginning != 0){
+        temp = beginning;
+        beginning = beginning->next;
+        delete temp;
+    }
+}
+
+template <typename T>
+List<T>::List(const List<T>& actual) : List<T>() {
+    dnode<T> *temp = actual.beginning;
+    while ( temp != 0){
+        if (beginning == 0){
+            beginning = new dnode<T>(temp->data);
+            ending = beginning;
+        }else{
+            ending->next = new dnode<T>(temp->data); 
+            ending->next->prev = ending;
+            ending = ending->next;
+        }
+        temp = temp->next;
+    }    
+}
+
+template <typename T>
+void List<T>::swap(List<T> &rhs){
+    dnode<T> *temp = beginning;
+    beginning = rhs.beginning;
+    rhs.beginning = temp;
+    temp = ending;
+    ending = rhs.ending; 
+    rhs.ending = temp;
+}
+
+
+

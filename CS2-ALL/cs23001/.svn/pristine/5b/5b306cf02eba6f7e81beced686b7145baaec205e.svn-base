@@ -1,0 +1,36 @@
+#include<iostream>
+#include "../string/string.hpp"
+#include "stack.hpp"
+
+String infix_to_postfix(std::istream& in){
+    stack<String> S;
+    String op, lhs, rhs;
+    String token;
+    in>>token;
+    //if(token == "") return String();
+    while (token != ';'){
+        if (token == ')'){
+            rhs = S.pop();
+            op = S.pop();
+            lhs = S.pop();
+            //std::cout<<op<<lhs<<rhs<<std::endl;
+            S.push(lhs + rhs + op);
+        }else if(token != '('){
+            String temp = " ";
+            temp = token;
+            S.push(temp);
+        }
+    in>>token;
+    }
+    
+    return S.pop();
+}
+
+void printInfix(std::ostream& out, std::istream& in){
+    String output;
+        while(!in.eof()){
+            output = infix_to_postfix(in);
+            out<<output<<std::endl;
+        }
+}
+

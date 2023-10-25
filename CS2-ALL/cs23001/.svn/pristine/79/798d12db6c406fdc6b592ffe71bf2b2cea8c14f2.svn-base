@@ -1,0 +1,12 @@
+#include<iostream>
+#include<cassert>
+#include"string.hpp"
+
+int main(){
+    {
+        String one("Hello World");
+        String two("ll");
+        one.findstr(0,two);
+    }
+}
+

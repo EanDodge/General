@@ -1,0 +1,35 @@
+Grades are out of 100% - Comments are mostly for why points were taken off.
+
+P1
+
+m1: 95 - all implementations should only be in cpp;
+m2: 90 - segmentation faults at end of add.cpp; could use some larger bigint in + test cases; not that many [] test cases;
+m3: 90 (regrade)
+
+bonus: 
+
+
+P2
+
+m1: 60 - input tests should really be automated -> grab log files; fails 1st instructor test -> Assertion `str.capacity() == STRING_SIZE-1' failed.; some test files could use a few more, should aim for at least 10 each, except constructors -> like empty strings, special characters, larger strings especially at or near cap, etc;
+m2: 
+m3: 
+m4: 
+
+bonus: 
+
+P3
+
+m1: 
+m2: 
+m3: 
+
+bonus: 
+
+P4
+
+m1: 
+m2: 
+m3: 
+
+bonus: 

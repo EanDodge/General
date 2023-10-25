@@ -1,0 +1,16 @@
+#include<iostream>
+#include"stack.hpp"
+#include"../string/string.hpp"
+#include<cassert>
+
+int main(){
+    {
+        stack<String> S;
+    stack<int> I;
+    stack<double> D;
+    stack<float> F;
+    stack<char> C;
+    }
+
+    std::cout<< " Done testing defualt ctor"<<std::endl;
+}

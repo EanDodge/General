@@ -1,0 +1,49 @@
+#include<iostream>
+#include<cassert>
+#include"string.hpp"
+
+int main(){
+    {
+        String one;
+        std::cin>>one;
+        std::cout<<one<<std::endl;;
+    }
+    {
+        String one;
+        std::cin>>one;
+        std::cout<<one<<std::endl;
+    }
+    {
+        String one;
+        int i = 0;
+        std::cout<<"give me 5 words"<<std::endl;
+        while(i < 5){
+            std::cin>>one;
+            ++i;
+        }
+        std::cout<<one<<std::endl;
+
+    }
+    {
+        String one;
+        int i = 0;
+        std::cout<<"give me 0 words"<<std::endl;
+        while(i < 0){
+            std::cin>>one;
+            ++i;
+        }
+        std::cout<<one<<std::endl;
+    }
+    {
+        String one;
+        int i = 0;
+        std::cout<<"give me 6 words"<<std::endl;
+        while(i < 5){
+            std::cin>>one;
+            ++i;
+        }
+        std::cout<<one<<std::endl;
+        std::cout<<"haha, i deleted one"<<std::endl;
+    }
+}
+

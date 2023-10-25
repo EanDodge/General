@@ -1,0 +1,163 @@
+//
+//
+// File:        logentry.cpp
+//
+// Version:     1.0
+// Date:
+// Author:
+//
+// Description: Class implementation for a log entry.
+//
+//
+
+#include "string.hpp"
+#include "logentry.hpp"
+#include <iostream>
+#include <vector>
+#include <cassert>
+
+void Date::setDate(String day_, String month_, int year_)
+{
+    day = day_;
+    month = month_;
+    year = year_;
+}
+void Time::setTime(int hour_, int minute_, int second_)
+{
+    hour = hour_;
+    minute = minute_;
+    second = second_;
+}
+
+int findnum(const String &rhs)
+{
+    // std::cout<<rhs<<std::endl;
+    int timesDigit = 1, result = 0, tmp = 0, charInt;
+    int len = rhs.length() - 1;
+    while (len >= 0)
+    {
+        charInt = (int)rhs[len] - (int)'0';
+        tmp = charInt * timesDigit;
+        result = result + tmp;
+        timesDigit = timesDigit * 10;
+        --len;
+    }
+    return result;
+}
+
+// REQUIRES: vec.size() != 1, vec.size() == 10
+// ENSURES: LogEntry(131.123.47.176 - - [18/Sep/2002:12:05:25 -0400] "GET /~darci/ HTTP/1.0" 200 5625);
+//
+LogEntry::LogEntry(String s) : LogEntry()
+{
+    int start = s.findch(0, '"');
+    int end = s.findch(start + 1, '"');
+    String str = s.substr(start, end);
+    request = str;
+    // std::cout<<str<<std::endl;
+    std::vector<String> vec = s.split(' ');
+    // std::cout << vec.size() << std::endl;
+    if (vec.size() != 10 && vec.size() != 1)
+    {
+        std::cout << "invalid" << std::endl;
+    }
+    else if (vec.size() == 1)
+    {
+        // std::cout<<"vec is 1"<<std::endl;
+        return;
+    }
+    else
+    {
+        host = vec[0];
+        std::vector<String> temp = vec[3].split('/');
+        std::vector<String> time_ = temp[2].split(':');
+        std::vector<String> fixDate = temp[0].split('[');
+        date.setDate(fixDate[1], temp[1], findnum(time_[0]));
+        time.setTime(findnum(time_[1]), findnum(time_[2]), findnum(time_[3]));
+        status = vec[8];
+        if (vec[9] == "-")
+        {
+            number_of_bytes = 0;
+        }
+        else
+        {
+            number_of_bytes = findnum(vec[9]);
+        }
+    }
+}
+
+// REQUIRES: an entry
+// ENSURES: a vector of LogEntrys
+//
+std::vector<LogEntry> parse(std::istream &in)
+{
+    std::vector<LogEntry> result;
+    char temp[200];
+    while (!in.eof())
+    {
+        in.getline(temp, 200);
+        result.push_back((String)temp);
+    }
+    return result;
+}
+std::ostream &operator<<(std::ostream &out, const LogEntry &rhs)
+{
+    if (rhs.host == "")
+    {
+        std::cout << "";
+    }
+    else
+    {
+        out << rhs.host;
+        out << " - - [";
+        out << rhs.date.getDay() << "/" << rhs.date.getMonth() << "/" << rhs.date.getYear() << ":";
+        out << rhs.time.getHour() << ":" << rhs.time.getMinute() << ":" << rhs.time.getSec() << "] ";
+        out << rhs.request << " " << rhs.status << " " << rhs.getByte() << std::endl;
+    }
+    return out;
+}
+
+// REQUIRES: vec.size() > 0, 
+// ENSURES: output_all(std::cout, vector) will print 131.123.47.176 - - [18/Sep/2002:12:05:25] "GET /~darci/ HTTP/1.0" 200 5625
+//
+void output_all(std::ostream &out, const std::vector<LogEntry> &vec)
+{
+    assert(vec.size() > 0);
+    size_t i = 0;
+    while (i < vec.size())
+    {
+        out << vec[i];
+        ++i;
+    }
+}
+
+// REQUIRES: vec.size() > 0, host != ""
+// ENSURES: by_host(std::cout, vector) will print 131.123.47.176
+//
+void by_host(std::ostream &out, const std::vector<LogEntry> &vec)
+{
+    assert(vec.size() > 0);
+    for (size_t i = 0; i < vec.size(); ++i)
+    {
+        if (vec[i].gethost() == "")
+        {
+            std::cout << "";
+        }
+        else
+        {
+            out << vec[i].gethost() << std::endl;
+        }
+    }
+}
+
+// REQUIRES: vec.size() > 0
+// ENSURES: byte_cout(vector) will count up bytes
+//
+int byte_count(const std::vector<LogEntry> &vec)
+{
+    assert(vec.size() > 0);
+    int result = 0;
+    for (size_t i = 0; i < vec.size(); ++i)
+        result += vec[i].getByte();
+    return result;
+}

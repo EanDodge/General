@@ -1,0 +1,114 @@
+4 color theorm
+any map can be colored, using only 4 colors, such that no two neighbors hqve the same colors
+Algorithm
+recusive
+color in specfic color in a certain order
+if a country can be colored, then color it and move on to the next country
+if no valid coloring exist for a country, un-color it and go back to the previous country
+Adjacency matrix tells us neighbors 
+
+
+code:
+
+const int MAP_SIZE = 10;
+enum palette {red, blue, green, yellow, none};
+
+class color{
+public:
+    color() : c(none) {};
+    color(palette hue) : c(hue) {};
+    color& operator++() {c = int(c) + 1; return *this;};
+    bool operator==(color x) const {return c == x.c; };
+    friend std::ostream& operator<<(std::ostream&, color);
+
+private:
+        palette c;
+};
+
+class map{
+public:
+    map();
+    int numOfCountries() const {return numOfCountries; };
+    void colorCountry(int, color);
+    bool isValidColoring(int, color) const;
+    friend std::ostream& operator<<(std::ostream&, const map&);
+    friend std::istream& operator>>(std::istream&, map&);
+
+private:
+    int numOfCountries;
+    bool neighbor[MAP_SIZE][MAP_SIZE];
+    color coloring[MAP_SIZE];
+}
+
+
+in cpp file
+
+#include "map.hpp"
+
+map::map() {
+    numOfCountries = MAP_SIZE;
+    for(int i = 0; i < MAP_SIZE; ++i){
+        coloring[i] = none;
+        for (int j = 0; j < MAP_SIZE; ++j){
+            neighbor[i][j] = false;
+        }
+    }
+}
+
+std::istream& operator>> (std::istream& in, map& m ){
+    in>> m.numOfCountries;
+    for (int i= 0; i < m.numOfCountries; ++i){
+        for(int j = 0; j<m.numOfCountries; ++j){
+            int temp;
+            in >> temp; std::cout << temp;
+            if (temp == 1) m.neighbor[i][j] = true;
+            else           m.neighbor[i][j] = false;
+        }
+        std::cout << std:: ednl;
+    }
+    return in;
+}
+
+std::ostream& operator<< (std::oststream& out, const map& m){
+    int i;
+    out << " Number of Countries: "<< m.numberOfCountries() << std::endl;
+    for(int i = 0; i < m.numofcountries(); ++i){
+        out << "country: " << i << " is " << m.coloring() << std::cout;
+    }
+}
+
+void map::colorCountry(int country, color hue){
+    coloring[country] = hue;
+}
+
+bool map::isValidColoring(int country, color hue) const {
+    for(int i = 0; i < numofcountries; ++i){
+        if (neighbor[country][i] && (coloring[i] == hue))
+            return false;
+    }
+    return true;
+}
+
+bool MapColor(int country, map& world){
+    if (country >= world.numberrobloc11
+    OfCountries()){
+        return true;
+    }
+    color hue = red;
+    bool doneColoring = false;
+    bool aColorRemains = true;
+    while (aColorRemains && !doneColoring){
+        if (world.isValidColoring(country, hue)){
+            world.colorCountry(country, hue);
+            doneColoring = Mapcolor(country+1, world); // this is recursive call
+        }
+        ++hue;
+        if ( hue == none) { 
+            aColorRemains = false;
+            world.colorCountry(country, none);
+        }
+    }
+    if(!doneColoring) //Backtracking, uncolor country
+        world.colorCountry(country, none);
+    return doneColoring;
+}

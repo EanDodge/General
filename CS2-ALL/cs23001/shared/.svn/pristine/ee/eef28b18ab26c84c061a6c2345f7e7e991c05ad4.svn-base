@@ -1,0 +1,25 @@
+This
+is
+a
+sample
+file
+with
+multiple
+lines.
+Function
+should
+read
+this
+in
+and
+output
+the
+text
+in
+this
+file
+without
+modifying
+the
+format.
+Number of times of execution is: 24

@@ -1,0 +1,90 @@
+fhf
+Generic fucntion
+template <typename T>
+void swap(T& lhs, T& rhs) {
+    T temp = lhs;
+    lhs = rhs;
+    rhs = temp;
+}
+int a = 10, b = 20;
+swap<int>(a,b);
+swap(a,b);
+we use capitol T for this function
+during the preprocessor phase, templates are instantiated
+-the template call is looked up
+-it can not generate code for it becuas eit doent know the types
+-but the templates varibles replace with the type;
+-auto code generation;
+this template is not complied- so little or no error checking;
+-only instantiated cide is compliled- errors messages will be pages long
+-it only compliels what gets instantiated
+-call it with any type many times
+-Where does this code go?
+--all template code must be available at the time of instantiation
+--templates are not complied, so they are not in object files'--hence, all templets code must be in header
+--therefore, ALl template code MUST be in a .hpp - so it can be included
+
+template <typename T>
+class Darray {
+public:
+    Darray() : ptr(0), cap(0) {};
+    Darray(int);
+    ~Darray();
+    Darray(const Darray<T>&);
+    Darray<T>& operator=(Darray<T> rhs) { swap(rhs); return *this;};
+    void swap(Darray<T>&);
+
+    T  operator[](int i) const {return ptr[i];}
+    T& operator[](int i)       {return ptr[i];};
+    int capacity()       const {return cap;};
+    
+    void resize(int);
+
+
+private:
+    T   *ptr;
+    int cap;
+};
+//want to do Darray<int> x(30);
+template <typename T>
+Darray<T>::Darry(int n) : Darray(){
+    if(n>0) {
+        cap = n;
+        ptr = new T[cap];
+    }
+}
+
+template <typename T>
+Darray<T>::~Darray(){
+    delete[]ptr;
+}
+
+template <typename T>
+Darray<T>::Darray(const Darray<T>& actual){ //copy ctor
+    cap = actual.cap;
+    ptr = new T[cap];
+    for(int i = 0; i<cap; ++i)
+        ptr[i] = actual.ptr[i];
+}
+template<typename T>
+void Darray<T>::swap(Darray<T>& rhs){
+    T ctemp = ptr;
+    ptr = rhs.ptr;
+    rhs.ptr = temp;
+
+    int ctemp = cap;
+    cap = rhs.cap;
+    rhs.cap = ctemp;
+}
+
+template<typename T>
+voud Darray<T>::resize(int newCap){
+    int smaller = cap;
+    if ( newCap < smaller) smaller = newCap;
+    cap = newCap;
+    T *temp = new T[cap];
+    for (int i=0; i<smaller; ++i)
+        temp[i] = ptr[i];
+    delete [] ptr;
+    ptr = temp;
+}

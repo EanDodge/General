@@ -1,0 +1,69 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include "bigint.hpp"
+
+int main()
+{
+    std::ifstream in;       // Define input stream
+    in.open("data1-1.txt"); // Open a file
+    if (!in)
+    { // Make sure file opened correctly
+        std::cout << "File not found: data1-1.txt" << std::endl;
+        exit(1);
+    }
+    while(!in.eof()){
+    // Until end of file
+    // Read two bigints
+    // Print them out
+    // Add them together
+    // Print out results
+    bigint bi;
+    bigint be;
+
+    
+        in >> bi >> be;
+
+        std::cout << bi << std::endl;
+        std::cout << std::endl;
+        std::cout << be << std::endl;
+
+        bigint result = bi + be;
+        std::cout << std::endl;
+        std::cout << "result "<< result << std::endl;
+        std::cout << std::endl;
+    
+/*
+    {
+        bigint bn, bo;
+        in >> bn >> bo;
+
+        std::cout << bn << std::endl;
+        std::cout << std::endl;
+        std::cout << bo << std::endl;
+
+        bigint result1 = bn + bo;
+        std::cout << std::endl;
+        std::cout << "result2: " << result1 << std::endl;
+        std::cout << std::endl;
+    }
+    {
+        bigint bv, bg;
+        in >> bv >> bg;
+
+        std::cout << bv << std::endl;
+        std::cout << std::endl;
+        std::cout << bg << std::endl;
+
+        bigint result2 = bv + bg;
+        std::cout << std::endl;
+        std::cout << "result3: " << result2 << std::endl;
+        std::cout << std::endl;
+    }
+
+    in.close();
+    return 0;
+}
+*/
+    }
+}

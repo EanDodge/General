@@ -1,0 +1,5 @@
+Explanation:
+It is the operator function for the vector.
+It takes the most time because in the finction
+bubble sort, it has to go through the vector multiple times.
+This is a very slow process, and it racked up the most time

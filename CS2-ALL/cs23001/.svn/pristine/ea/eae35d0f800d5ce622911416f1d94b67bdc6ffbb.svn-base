@@ -1,0 +1,103 @@
+#include<iostream>
+#include "../string/string.hpp"
+#include "stack.hpp"
+#include <vector>
+#include <fstream>
+
+String infix_to_postfix(std::istream& in, std::ostream& out)
+{
+    stack<String> S;
+    String op, lhs, rhs;
+    String token;
+    in>>token;
+    if(token == ""){exit(0);}
+    out<<token << " ";
+    //if(token == "") return String();
+    while (token != ';' ){
+        std::cout<<"in while"<<std::endl;
+        if (token == ')'){
+            rhs = S.pop();
+            op = S.pop();
+            lhs = S.pop();
+            //std::cout<<op<<lhs<<rhs<<std::endl;
+            S.push(lhs + " " + rhs + " " + op);
+        }else if(token != '('){
+            String temp = " ";
+            temp = token;
+            S.push(temp);
+        }
+    in>>token;
+    if (token != ";")
+        out<<token << " ";
+    }
+    return S.pop();
+    
+}
+
+
+bool isOperator(const String& oper){
+    if(oper == "+" || oper == "-" || 
+       oper == "*" || oper == "/") return true;
+    return false;
+}
+
+String oper(const String& op){
+    assert(isOperator(op));
+    if(op == "+") return "AD";
+    if(op == "-") return "SB";
+    if(op == "*") return "MU";
+    if(op == "/") return "DV";
+    return String();
+}
+String evaluate(const String& left, const String& T, const String& right, std::ostream& out, int& n){
+    char num = n + int('0');
+    String tmp("TMP");
+    tmp += num;
+    out<<"   "<<"LD"<<"     "<<left<<std::endl;
+    out<<"   "<<oper(T)<<"     "<<right<<std::endl;
+    out<<"   "<<"ST"<<"     "<<tmp<<std::endl;
+    ++n;
+    return tmp;
+}
+
+String postfix_to_assembly(String post, std::ostream& out){
+    //std::cout<<"in func"<<std::endl;
+    if ( post.length() == 0) return String();
+    std::cout<<post.length();
+    std::vector<String> expr;
+    stack<String> S;
+    String left, right, T;
+    expr = post.split(' ');
+    int n = 1;
+    size_t i = 0;
+    while ( i < expr.size()){
+        //std::cout<<"in while"<<std::endl;
+        T = expr[i];
+        if (!isOperator(T))
+            S.push(T);
+        else {
+            //std::cout<<"else"<<std::endl;
+            right = S.pop();
+            left = S.pop();
+            S.push(evaluate (left, T, right, out, n));
+        }
+        ++i;
+    }
+    return S.pop();
+}
+
+void printInfix(std::ostream& out, std::istream& in)
+{
+    String output;
+
+        while(!in.eof()){
+            std::cout<<"Infix expression: ";
+            output = infix_to_postfix(in, out);
+            std::cout<< "\n"<< "Postfix expression: ";
+            out<<output<<std::endl;
+            postfix_to_assembly(output, out);
+            std::cout<<"\n";
+        }
+}
+
+

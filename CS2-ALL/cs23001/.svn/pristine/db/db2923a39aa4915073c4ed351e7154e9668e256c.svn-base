@@ -1,0 +1,335 @@
+#include "string.hpp"
+#include<iostream>
+#include<vector>
+#include <cassert>
+
+// TEST
+
+String::String()
+{
+    stringSize = 1;
+    str = new char[stringSize];
+    str[0] = '\0';
+}
+
+String::String(char ch)
+{
+    if (ch != '\0')
+    {
+        stringSize = 2;
+        str = new char[stringSize];
+        str[0] = ch;
+        str[1] = '\0';
+    }
+    else
+    {
+        stringSize = 1;
+        str = new char[stringSize];
+        str[0] = '\0';
+    }
+}
+
+String::String(const char s[])
+{
+    stringSize = 0;
+    while (s[stringSize] != 0)
+    {
+        ++stringSize;
+    }
+    str = new char[++stringSize];
+    int i = 0;
+    while (i < stringSize - 1)
+    {
+        str[i] = s[i];
+        ++i;
+    }
+
+    str[i] = '\0';
+}
+int String::capacity() const
+{
+    return stringSize - 1;
+}
+int String::length() const
+{
+    int i = 0;
+    while (str[i] != '\0')
+        ++i;
+    if (str[0] == '\0')
+        return 0;
+    else
+        return i;
+}
+
+// Requires: 0 <= i < length()
+char String::operator[](int i) const
+{
+    // want to do cout<<b[0]
+    assert(i >= 0);
+    assert(i < stringSize); // calls it on "this"//a keyword that is a pointer to the object the method was called upon
+    return str[i];
+}
+// char & you return a pointer to where you return too
+char &String::operator[](int i)
+{ // you can modify this since there is no const
+    // want to do b[0] = 'x'
+    assert(i >= 0);
+    assert(i < stringSize);
+    return str[i];
+}
+
+String &String::operator+=(const String &rhs)
+{
+    // std::cout << *this <<  " + " <<"(" <<rhs << ")"<<std::endl;
+    //  std::cout << &(this->str) << " - " << &(rhs.str) << std::endl;
+    int offset = length();
+    int rhsLen = rhs.length();
+    int size = offset + rhsLen + 1;
+    char *tmp = new char[size];
+    stringSize = size;
+    for (int j = 0; j < offset; ++j)
+        tmp[j] = str[j];
+    // std::cout << rhs << " BEF" << std::endl;
+
+    int i = 0;
+    // std::cout << rhs << " AFT" << std::endl;
+    while (i < rhsLen)
+    {
+        // std::cout<<"rhsLen == "<<rhsLen<<std::endl;
+        if (offset + i >= capacity() + rhs.capacity())
+            break;
+        if (rhsLen == 0)
+            break;
+        // std::cout << "COPYING " << rhs[i] << " FROM " << rhs << std::endl;
+        tmp[offset + i] = rhs[i];
+        ++i;
+    }
+    // if(tmp[offset +i - 1] == ' '){
+    // std::cout<<"GETTING RID OF ("<<tmp[offset+i -1]<<")"<<std::endl;
+    // tmp[offset +i -1] = '\0';
+    //--stringSize;
+    //}
+    // else{
+    tmp[offset + i] = '\0';
+    //}
+    delete[] str;
+    str = tmp;
+    tmp = NULL;
+    return *this;
+}
+
+String operator+(String lhs, const String &rhs)
+{
+    // std::cout  << "IN +" << std::endl;
+    return lhs += rhs;
+}
+
+bool String::operator==(const String &rhs) const
+{
+    int i = 0;
+    while (str[i] != 0 && (rhs.str[i] != 0) &&
+           (str[i] == rhs.str[i]))
+        ++i;
+    return str[i] == rhs.str[i]; // loops till difference, if different, this case will be false, if true, this has to be true
+}
+
+bool operator==(char lhs, const String &rhs)
+{
+    return String(lhs) == rhs;
+}
+bool operator==(const char lhs[], const String &rhs)
+{
+    return String(lhs) == rhs;
+}
+
+bool String::operator<(const String &rhs) const
+{
+    int i = 0;
+    while ((str[i] != 0) && (rhs.str[i] != 0) && (str[i] == rhs.str[i]))
+    {
+        ++i;
+    }
+    return str[i] < rhs.str[i];
+}
+bool operator!=(const String &lhs, const String &rhs)
+{
+    return !(lhs == rhs);
+}
+bool operator>(const String &lhs, const String &rhs)
+{
+    return rhs < lhs;
+}
+
+bool operator<=(const String &lhs, const String &rhs)
+{
+    return !(lhs > rhs);
+}
+bool operator<(char lhs, const String &rhs)
+{
+    return String(lhs) < rhs;
+}
+bool operator<(const char lhs[], const String &rhs)
+{
+    return String(lhs) < rhs;
+}
+bool operator>=(const String &lhs, const String &rhs)
+{
+    return !(rhs < lhs);
+}
+
+// REQUIERS: 0 <= start <= end < length()
+// ENSURES: retVal == str[start,...,end]
+String String::substr(int start, int end) const
+{
+    // std::cout<<"PRINTING THIS "<< *this<<std::endl;
+    // std::cout<<"FROM "<<start<<" TO "<<end<<std::endl;
+    
+    if (start < 0)
+        start = 0;
+    if (end < start)
+        return String();
+    if (end >= length())
+        end = length() - 1;
+    String result;
+    for (int i = start; i <= end; ++i)
+    {
+        result += str[i];
+        // std::cout<<result<<" ";
+    }
+    // std::cout<<std::endl;
+    // std::cout<<"result is - "<<result<<std::endl;
+    return result;
+}
+
+// Requiers: 0 <= start < length()'
+// Ensures: retVal == i : str[i] == ch; || -1 if no ch in str
+int String::findch(int start, char ch) const
+{
+    if (start < 0)
+        start = 0;
+    if (start >= length())
+        return -1;
+    int i = start;
+    while ((str[i] != 0) && (str[i] != ch))
+        ++i;
+    if (str[i] == ch)
+        return i;
+    else
+        return -1;
+}
+
+int String::findstr(int start, const String &array) const
+{
+    // std::cout<<"START IS "<<start<<std::endl;
+    // std::cout<<"finding "<< array<<" FROM "<< *this<<std::endl;
+    if (start < 0)
+        start = 0;
+    if (start >= length())
+        return -1;
+    int size = array.length(), i = start;
+    String result;
+    result = substr(i, (size + i) - 1);
+    while (!(result == array) && (length() - i >= size + 1))
+    {
+        ++i;
+        result = substr(i, (size + i) - 1);
+    }
+    if (result == array)
+    {
+        // std::cout<<"result is "<<i<<std::endl;
+        return i;
+    }
+    else
+        // std::cout<<"result is -1"<<std::endl;
+        return -1;
+}
+
+std::istream &operator>>(std::istream &in, String &rhs)
+{
+    // std::cout<< "INPUTING, HERE IS WHAT IS HERE- "<< rhs <<std::endl;
+    const int size = rhs.stringSize;
+    if (rhs[0] != '\0') // making it back to nothing
+    {
+        delete[] rhs.str;
+        rhs.str = new char[1];
+        rhs[0] = '\0';
+    }
+    char *ch = new char[size];
+    in >> ch;
+    String temp(ch);
+    rhs += temp;
+    delete[] ch;
+    // std::cout<<"returning- "<< rhs<< "-size" << rhs.stringSize<<std::endl;
+    return in;
+}
+
+std::ostream &operator<<(std::ostream &out, const String &rhs)
+{
+    int i = 0;
+    while (i < rhs.length())
+    {
+        out << rhs[i];
+        ++i;
+    }
+    return out;
+}
+
+String::~String()
+{
+    delete[] str;
+}
+
+String::String(const String &rhs)
+{ // copy constructor
+    // std::cout << "IN COPY CTOR: " << *this << std::endl;
+    stringSize = rhs.stringSize;
+    str = new char[stringSize];
+    for (int i = 0; i < stringSize; ++i)
+    {
+        str[i] = rhs.str[i];
+    }
+    // std::cout << "DONE COPY: " << rhs << std::endl;
+}
+
+void String::swap(String &rhs)
+{
+    char *temp = str;
+    str = rhs.str;
+    rhs.str = temp;
+    int ctmp = stringSize;
+    stringSize = rhs.stringSize;
+    rhs.stringSize = ctmp;
+}
+
+String &String::operator=(String rhs)
+{
+    swap(rhs);
+    return *this;
+}
+std::vector<String> String::split(char ch) const{
+    std::vector<String> result;
+    String subString;
+    //std::cout<<"The character to find is "<<ch<< " from "<<*this<<std::endl;
+    int start = 0;
+    int index = findch(start,ch);
+    
+    while(index != -1 ){
+        //std::cout<<"INDEX IS "<<index<<std::endl;
+        subString = substr(start, index - 1);
+        //std::cout<<"substr is "<<subString<<std::endl;
+        result.push_back(subString);
+
+        start = index + 1;
+        index = findch(start,ch);
+        }
+        
+            //std::cout<<"adding the last part"<<std::endl;
+        subString = substr(start, length());
+        result.push_back(subString);        
+    
+    //for(size_t i = 0; i < result.size(); ++i){
+    //    std::cout<<result[i]<<std::endl;
+    //}
+    //std::cout<<"we are out"<<std::endl;
+    return result;
+}

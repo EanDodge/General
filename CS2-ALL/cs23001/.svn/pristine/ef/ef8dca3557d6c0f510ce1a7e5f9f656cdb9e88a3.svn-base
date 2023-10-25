@@ -1,0 +1,28 @@
+#ifndef BIGINT_HPP
+#define BIGINT_HPP
+// class bigint and its methods
+// cs23001
+// bigint program
+// Ean Dodge
+#include <iostream>
+const int CAPACITY = 160;
+
+class bigint
+{
+public:
+    bigint()
+    {
+        for (int i = 0; i < CAPACITY; ++i)
+            num[i] = 0;
+    }
+    bigint(const char[]);
+    bigint(int ctor);
+    friend std::ostream &operator<<(std::ostream &, bigint);
+    bool operator==(bigint);
+    void debugPrint(std::ostream &) const;
+
+private:
+    int num[CAPACITY];
+};
+
+#endif

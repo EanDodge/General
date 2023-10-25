@@ -1,0 +1,57 @@
+#include<iostream>
+#include "../string/string.hpp"
+#include "../assembler/stack.hpp"
+#include <vector>
+#include <fstream>
+
+/*std::vector<String> Parse(std::istream& in){
+    std::vector<String> result;
+    String input;
+    in>>input;
+    while(input != ';'){
+    std::cout<<input;
+    result.push_back(input);
+    in>>input;
+    
+    }
+    
+    return result;
+}
+*/
+String infix_to_prefix(std::istream& in){
+    stack<String> S;
+    String op, lhs, rhs;
+    String token;
+    in>>token;
+    //if(token == "") return String();
+    while (token != ';'){
+        if (token == ')'){
+            rhs = S.pop();
+            op = S.pop();
+            lhs = S.pop();
+            //std::cout<<op<<lhs<<rhs<<std::endl;
+            S.push(op + lhs + rhs);
+        }else if(token != '('){
+            String temp = " ";
+            temp = token;
+            S.push(temp);
+        }
+    in>>token;
+    }
+    
+    return S.pop();
+}
+
+int main(){
+    std::ifstream in("data3-1.txt");
+    if(!in){
+        std::cout<<"not there buddy"<<std::endl;
+        exit(1);
+    }
+    else{
+        while(!in.eof()){
+            String S = infix_to_prefix(in);
+            std::cout<<S<<std::endl;
+    }
+}
+}

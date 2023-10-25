@@ -1,0 +1,13 @@
+#include<iostream>
+#include"object_construction.hpp"
+Student::Student(){
+    name = new char[0];
+    age = 0;
+}
+Student::Student(const char ch[], int size, const int num){
+    name = new char[0];
+    age = num;
+    for (int i = 0; i < size - 1; ++i ){
+        
+    }
+}

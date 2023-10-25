@@ -1,0 +1,227 @@
+TREES
+
+A special form of a graph
+has nodes and edges
+a tree is a subset of graph- undirected graph with no simple circuts
+a rooted tree in which one vertex has been desinated as the root and every edge is directed away from the root 
+----****a rooted tree is called an N-ary tree if every internal vertex has no more than n children. tree is alled full n-ary otherwise
+                         root
+                    A            b //siblings(both children of root)
+                   c  D            E //grandchildren
+                 f  G            H  g
+                J k   L
+
+-It matters about the order of insertion(linear seach)
+-start with root, next number-greater or less than? less goes left, greater goes right, repeat till place to insert 
+
+Tree traversals
+travserse the tree(search) a list either forward or backwards
+there is a number of ways to do so
+starting from the root go left or right
+can visit (sccess the data) at the first pass or when returing
+three main
+-inorder
+-preorder
+-postorder
+
+inorder{
+    if(ptr)
+    inorder(ptr->left)
+    visit(ptr->data)
+    inorder(ptr-> right)
+}
+preorder{
+    visit(ptr->data)
+    preorder(ptr->left)
+    preorder(ptr->right)
+}
+postorder{
+    postorder(ptr->left)
+    postorder(ptr->right)
+    visit(ptr->data)
+}
+
+template <typename T>
+class bnode {
+public:
+    bnode() :left(0), right(0) {};
+    bnode(const T& x) : data(x), left(0), right(0){};
+
+};
+
+
+template <typename T>
+class btree {
+public:
+    btree() :              (): root(0){};
+    btree(const T& item) : data (item), empty(false), left(0), right(0) {};
+    ~btree()
+    btree     (const btree<T>&);
+    void      swap(btree<T>&);
+    btree<t>& operator=(btree<T> rhs) {swap(rhs); return *this;};
+    bool      isEmpty() const {return empty;};
+    bool      isFull() const;
+    bool      bfind(const T&) const;
+    bool      bremove(const T&);
+    void      binsert(const T&);
+    void      preorder(std::ostream&)const;
+    void      postorder(std::ostream&)const;
+    void      inorder(std::ostream&)const;
+
+
+private:
+    bnode<T> *root;
+};
+
+template <typename T>
+class bnode {
+public:
+    bnode() : left(0), right(0) {};
+    bnode(const T& item) : left(0), right(0), data(item) {};
+    ~bnode();
+    bnode(const bnode<T>&);
+    void binsert(const T&);
+    bool find(const T&) const;
+    bnode<T>* bremove(const T&);
+    T predecessor() const;
+
+private:
+    bnode<T> *left;
+    bnode<T> *right;
+    T         data;
+}
+
+template<typename T>
+bool btree<T>::find(const T& key) const {
+    if(root)
+        return root->find(key);
+    else
+        return false;
+}
+
+template <typename T>
+bool bnode<T>>::find(const T& key) const {
+    if(key == data)
+        return true;
+    else if ( key < data )
+        if (left) 
+            return left->find(key);
+        else
+            return false;
+    else
+        if(right)
+            return right->find(key);
+        else
+            return false;
+}
+
+templat <typename T>
+void btree<T>::binsert(const T& item){
+    if(!root) {
+        root = new bnode<T>(item);
+    }else {
+        root->binsert(item);
+    }
+}
+
+template <typename T>
+void bnode<T>::binsert(const T& item){
+    if ( item == data) return;
+    if (item < data){
+        if(left)
+            left->binsert(item);
+        else    
+            left = new bnode<T>(item);
+    }else {
+        if(right)
+            right -> binsert(item);
+        else
+            right = new bnode<T>(item);
+    }
+}
+//Requires: be called upon the left subtree
+template <typename T>
+T bnode<T>::predecessor() const {
+    if ( right)
+        right->predecessor();
+    return data;
+}
+
+// REQUIRES : key in tree
+// ENSURES: key removed from tree
+template <typename T>
+void btree<T>::bremove(const T& key){
+    if(root->find(key))
+        root = root->bremove(key);
+}
+
+template <typename T>
+bnode<T>* bnode<T>::bremove(const T& key){
+    if ( key == data){
+    if(!left && !right) {// no children
+        delete this;
+        return 0;
+    }
+    if ( !left && right) { // just a right
+        bnode<t> *temp = right;
+        right = 0;
+        delete this;
+        return temp;
+    }
+    if ( left && ! right){ // just a left
+        bnode<T> *temp = left;
+        left = 0;
+        delete this;
+        return temp;
+    }
+    
+    //two chilren
+    data = left->predecessor();
+    left = left->bremove(data);
+
+
+    }else if(key < data){
+        left = left->bremove(key);
+    }else{
+        right = right->bremove(key);
+    }
+    return this;
+}
+
+template <typename T>
+btree<T>::btree(const btree<T>& actual) : btree<T>(){
+    if (actual.root)
+        root = new bnode<T>(*(actual.root));
+}
+template <typename T>
+bnode<T>::bnode(const bnode<T>& actual) : bnode<T>() {
+    data = actual.data;
+    if ( actual.left) left = new bnode<T>(*(actual.left));
+    if ( actual.right) right = new bnode<T>(*(actual.right));
+}
+
+template <typename T>
+btree<T>::~btree(){
+    if (root) delete root;
+}
+
+template <typename T>
+bnode<T>::~bnode(){
+    if (left) delete left;
+    if (right) delete right;
+    //Compiler cleans up the bnode
+}
+
+template <typename T>
+void btree<t>::inorder(std::ostream& out) const {
+    if ( root) root -> inorder(out);
+}
+
+template <typename T>
+void bnode<T>::inorder(std::ostream& out) const {
+    if(left) left->inorder(out);
+    out << data;
+    if ( right ) right->inorder(out);
+}
+
+//in first btree, we dont haave two function calls for each function, but in btree2 we get this much easier way to do things

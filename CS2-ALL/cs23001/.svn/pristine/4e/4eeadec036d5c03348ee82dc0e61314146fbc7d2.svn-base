@@ -1,0 +1,120 @@
+//
+//
+// File:        logentry.cpp  
+//       
+// Version:     1.0
+// Date:        
+// Author:      
+//
+// Description: Class implementation for a log entry.
+//
+//
+
+#include "string.hpp"
+#include "logentry.hpp"
+#include <iostream>
+#include <vector>
+
+void Date::setDate(String day_, String month_, int year_){
+    day = day_;
+    month= month_;
+    year = year_;
+}
+void Time::setTime(int hour_, int minute_, int second_){
+    hour = hour_;
+    minute = minute_;
+    second = second_;
+}
+
+int findnum(const String& rhs){
+    int timesDigit = 1, result = 0, tmp = 0, charInt;
+    int len = rhs.length();
+    while(len != 0){
+        charInt = (int)rhs[len] - (int)'0';
+        tmp = charInt * timesDigit;
+        result = result + tmp;
+        timesDigit = timesDigit * 10;
+        --len;
+    }
+    return result;
+}
+
+
+// REQUIRES:
+// ENSURES: 
+//
+LogEntry::LogEntry(String s) {
+    int start = s.findch(0,'"');
+    int end = s.findch(start, '"');
+    String str = s.substr(start, end);
+    request = str;
+    std::vector<String> vec = s.split(' ');
+    if(vec.size() != 10) std::cout<<"invalid"<<std::endl;
+    else{
+    host = vec[0];
+    std::vector<String> temp = vec[3].split('/');
+    std::vector<String> time_ = temp[2].split(':');
+    date.setDate(temp[0], temp[1], findnum(time_[0]));
+    time.setTime(findnum(time_[1]), findnum(time_[2]), findnum(time_[3]));
+    status = vec[8];
+    if(vec[9] == "-"){
+        number_of_bytes = 0;
+    }
+    else{
+    number_of_bytes = findnum(vec[9]);
+    }
+    }
+}
+
+// REQUIRES:
+// ENSURES: 
+//
+std::vector<LogEntry> parse(std::istream& in) {
+    std::vector<LogEntry> result;
+    int i = 0;
+    char *temp;
+    while(!EOF){
+    in.getline(temp, 200);
+    result[i] = (String)temp;
+    ++i;
+    }
+    return result;
+}
+std::ostream& operator<<(std::ostream& out, const LogEntry& rhs){
+    out<<rhs.host;
+    out<<" - - [";
+    out<<rhs.date.getDay()<<"/"<<rhs.date.getMonth()<<"/"<<rhs.date.getYear()<<":";
+    out<<rhs.time.getHour()<<":"<<rhs.time.getMinute()<<":"<<rhs.time.getSec()<<"] ";
+    out<<rhs.request<< rhs.status << rhs.getByte() << std::endl;
+    return out;
+}
+
+// REQUIRES:
+// ENSURES: 
+//
+void output_all(std::ostream& out, const std::vector<LogEntry> & vec) {
+    size_t i = 0;
+    while(i <vec.size()){
+        out<<vec[i];
+    }
+}
+
+// REQUIRES:
+// ENSURES: 
+//
+void by_host(std::ostream& out, const std::vector<LogEntry>& vec) {
+    size_t i = 0;
+    while (i< vec.size())
+    out << vec[i].gethost() << std::endl;
+}
+
+/// REQUIRES:
+// ENSURES: 
+//
+int byte_count(const std::vector<LogEntry> & vec) {
+    int result;
+    for(size_t i= 1; i<vec.size(); ++i)
+        result = vec[i].getByte() + vec[i-1].getByte();
+    return result;
+}
+

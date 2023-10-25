@@ -1,0 +1,489 @@
+constructors
+used to initilize objects
+replaces initilize mehtods and some set methods
+called at declaration implicitly
+you need a default constructor too because it can fail on you
+GOLDEN RULE
+Always define incilde gaurds for .hpp files
+Always have a defualt contructor
+
+code:
+class point{
+public:
+point(); // default ctor(constructor)
+point(double,double);  
+
+
+//out of line
+point::point(){
+x=0;
+y=0;
+}
+point::point(double nx, double ny){
+x=nx;
+y=ny;
+}
+
+
+//in main
+point c;//puts attributes to 0
+point a(3,4);
+c = point();
+a = point(4,8);
+c = a.add(b);
+c = a + b;
+
+
+you can overload almost every operator
+code:
+point point::operator+(point rhs){
+point result;
+result.x = x + rhs.x;
+result.y = y + rhs.y;
+ return result;
+}
+
+//main
+a = b.operator+(c);
+or
+a = b + c;
+//example
+a = point (4,8)
+b = point (2,10)
+
+point c;
+c = a + b;
+// c would be x = 6 y = 18
+
+//overloading subtraction is the same thing
+point point::operator-(point rhs){
+point result;
+result.x = x - rhs.x;
+result.y = y - rhs.y;
+return result;
+}//need to have in hpp file as well(prototype)
+
+//in main
+point d;
+d = a-b;
+
+//do not use a.print(std::cout);
+//we want std::cout << a << std::endl;
+
+//in header
+//void operator<<(std::ostream&);// dont want, be like a.operator<<(std::cout)
+
+//we will have to make a friend or free fucntion
+
+std::ostream& operator<<(std::ostream&, point);
+
+//in .cpp
+
+std::ostream& operator<<(std::ostream& out, point rhs){
+out<< "(" << rhs.getx() << ", " << rhs.gety() << ")";
+return out;
+}
+
+//method v function
+a mehtod is invoked on an object of a class
+a function is just called(freely)
+
+//in main
+//you can use
+operator<<(std::cout, a);
+//or
+std::cout<< a;
+
+// what does return out do?
+an ostream like cout fout are pointers
+it points to the place it is going to print next, thats why we return the last point of the ostream
+std::cout a << "x";
+or 
+operator<<(operator<<(std::cout, a), "x");
+//make sure std::ostream had a &;
+
+you can make the operator << a friend function, then we can use private varibles, but that access to a private 
+varible that we dont want. since we have getx and gety, we can just use them
+
+std::istream& operator>>(std::istream& in, point &rhs){
+double tempy, tempx;
+in>> temx >> tempy;
+rhs = point ( temx, tempy);
+return in;
+}
+//in main
+
+std::cin>> a;//simple, would like two doubles
+
+//1/30/23
+You can think of am array any way you want.
+you can have it
+12345678
+43587685
+or
+87654321
+58678534
+if addition number is bigger than 10, have a carry
+lecture 4:
+step one is preprossing going on
+step 2 is compilation
+step 3 is linking everything
+
+after preprossing you get an intermediate file .i
+the once you compile, you get .o files
+at linking you get executable files
+
+you may get too many files to do line by line very time, so we use a make file
+to just compile:
+clang++ foo.cpp -c - Wall -o foo.o// foo.o is the output file you put in to
+clang++ foo.o fool.o main.o -Wall -o prog
+//it would be much easier to do all of this in a make file everytime//
+-c means compile
+-o means where the output is going
+-Wall shows warnings
+PREPROCESSOR
+-includes .hpp files
+-evaluates include guardd
+COMPILATION
+-lexical analysis(checks for tokens)
+-syntactic analysis-parses code(using grammer) builds abstract syntax tree
+- sematic analysis, type resolution, semantics
+-syntax errors and warning can be gernerated
+-generates intermediate representation
+-platform independent clang++,g++
+ASSEMBLER CODE
+generation of code
+LINKER
+-links all the seperate object files
+-links all the assciated li ares
+-links single main
+-linker errors can occur
+EXECUTION
+loader reads exe from disk and loads into memory
+-cpu executes each machine instruction
+-runtime errors can occur
+Software testing:
+the objective of testing is to uncover faults, uncover erros
+- Afailure is an incorrect output for a givien input
+-failures are caused by faults/errors in your program
+-a fault is an incorrect piece of code (bug)
+  -missing cidition
+
+FINDING faults
+test cases are developed to exercise your program with the goal od uncovering the faults
+  - given a failure, debugging is done to identify the fault in the code
+the best test case is one that has high probility to cause a failure
+start bt testing each method(unit test)
+Then each class in full(moudule system)
+-Then the whole program
+INfo needed to do testing
+a method is defined by an input output specification
+ - termed the I/O spec
+ - the pre and post conditions of a funxtion describe the I/O soec
+-A method is also defined by uts implemetauion
+
+Assertion(assert): a statment that is true as a specific point in the program
+Pre-condition(requires): a statement that must be true before a method is called
+post condition(ensures): A statement that is true after a method is executed
+invarients - statemtn that are always true
+loop, class, global
+
+Black-box vs glass box testing
+BLACK BOX
+testing tonly the I/O spec to develop test cases
+glass box only uses implementation details 
+
+most function have a very large inputs and outputs
+
+you dont need to do every input and output
+
+pairing down test cases 
+take advantages of symmetries, equivalancies, and interdependices in the data to reduce the number of test cases
+equivalence classes, numbers that are similar
+{-20...-1}{0}{1-20]
+only take
+take cases that are boundries
+-20,-1,0,1,20
+
+test driven development
+~testing is an integral and critical part of development
+without testnig, you do not have a functioning application(bugs)
+to write a method/function
+
+2/1/23
+naming Identifiers:
+	varibles
+	types,classes,structs,enums
+	methods,function
+	Global constants
+
+-think abou tht=e names of the varibles
+dont want to forget what they do later
+Rules:
+-Entities - nouns
+--the entities being acted upon in the program
+--person, stack,list,window,menu
+plurals should be avoided
+--String people[n] // do not use
+--String person[n] // person[3] = "Jane"
+Action - Verbs
+--Function and method names
+---the perform the actions in the program
+-Ex.
+--get,set,find
+Naming styles
+-Pick one and use it
+--camelCase-capitalize words (after the first)
+--Under_score - underscore between words,isolated imbetted underscore
+
+-use full words-do not make up words
+-try to avoid abbreviations and acrnyms, unless commonly known
+-use correct grammer
+-A name MUST reflect its meaning and use in the code
+
+Clarity
+-No magic numbers
+ -const int PI = 3.14;
+ - const int BIGINT_SIZE = 200
+-portable values
+Not (ch - 48)
+avoid l and 1 - these are the letter l and number one
+
+Indentation and spacing
+-always use consistent indentation and spacing
+-Most IDE use 4 spack black
+spaces. NO tabs! IDE option
+
+Take advantages and use the auto indent in the IDE or editor
+Take time to g back and clean up indentation
+
+Lecture 5:
+Code set ADT
+Const ref parameters
+Const methods
+I/O operators
+
+set ADT:
+a set is an unordered collection of distucnt objects
+Objects in a set are calle delements or members of a set
+S = {a,b,c,d} is a set named S with elements a,b,c, and dThe cardnality of a set is written |S|
+Operators:
+union - everything in A or its in B
+intersection: everything in A and everything in B
+difference: A-B = everything is in A but not in B
+Equality , Every elemet in a and B are equal
+subset - every element in A is in B
+Proper subset- everything in A is in B, but they are not equal
+
+Implementation:
+set of positive nymbers from 0 to some N
+An array of int size N
+0  1  2  3
+4  3  6  8
+ to check, we will have to loop with an array, but is very non-effiecient
+
+More clever solution:
+computer science is often about trade offs
+-easy representaion and slow computation
+complex(clever)
+
+Array of bool[N]
+S =[4,3,6,8}
+0  1  2  3  4  5  6  7  8  9  10
+F  F  F  T  T  F  T  F  T  F  F
+
+now it only takes one pass through the array
+
+to get the union, you do an "or" on each element
+
+When passing large onjects to a methid/function ned to worry about effiencency
+-Call-by-value makes a complete copy of the object
+-if the object is large 
+use const & instead of - no copy is done and const protects the argument
+
+make our method const to protect not chamging what is called on
+need to enfore that restriction(a+b)- should not be affected
+set operator+(const set&)const;
+
+L-values and r-values
+
+L-values are left values, they can be on the left side of an assignment, but also a right side.
+r-value can be on the right side, but it cant be on the left side of assignment.
+a = a+ 10;
+10 is the r-value, a is the l-value; global const are r - values as well; only l-value can be passes by reference
+
+set set::operator+(const set & rhs) const{
+    set result;
+    result.s[0] = s[0] + rhs.s[0]
+}
+"try to restrict where a bug can occur"
+Code:
+include guards
+#ifndef CS2_SET_HPP_
+#define CS2_SET_HPP_
+
+#include<iostream>
+
+const int DOMAIN = 6400;
+
+class set {
+public:
+    set();
+    set(int);
+    set(int,int);
+    set(std::initializer_list<int>);
+
+    int card()const;
+
+    bool operator[](int) const;
+    set operator+(const set&)const;
+    set operator*(const set&)const;
+    set operator-(const set&)const;
+
+    bool operator==(const set&) const;
+    bool operator<=(const set&) const;
+private:
+    bool element[DOMAIN];
+};
+set operator+(int,           const set&);
+set operator*(int,           const set&);
+set operator-(int,           const set&);
+bool operator!=(const set&,  const set&);
+bool operator<(const set&,   const set&);
+bool operator>(const set&,   const set&);
+bool operator>=(const set&,  const set&);
+bool operator==(int,         const set&);
+bool operator<=(const set&,  const set&);
+
+std::ostream& operator<<(std::ostream&, const set&)
+std::istream& operator>>*std::istream&, set&);
+#endif
+
+
+in .cpp(implementatiopn)
+
+#include "set.hpp"
+bool inRange(int i){
+return (0<= i) && (i<DOMAIN)
+set::set() {
+    for(int i = 0; i< DOMAIN; ++i)
+        element[i] = false;
+}
+// Requires: 0 <= x < DOMAIN
+set::set(int x) : set() {
+if(inRange(x)) element[x] = true;
+}
+
+set::set(int x, int y) : set() {
+    if(inRange(x)) element[x]=true;
+    if(inRange(y)) element[x]=true;
+}
+//set a = {2,4,6};
+set::set(std::initializer_list<int> lst) : set(){
+    for(int i : lst){
+        if(inRange(i)) element[i]= true;
+}
+//Cardinality of set (number of elements)
+int set::card() const{
+    int result = 0;
+    for(int i = 0; i<DOMAIN; ++i){
+        if (element[i]) ++result;
+    }
+    return result;
+}
+//requires: 0<= x < Domain
+bool set::operator[](int x) const{
+    if(inRange(x))
+        return element[x];
+    else
+        return false;
+}
+
+//Union
+set set::operator+(const set& rhs) const {
+    set result;
+
+    for(int i= 0; i<DOMAIN; ++i) [
+        result.element[i] = element[i] || rhs.element[i];
+    }
+
+    return result;
+}
+
+//intercection
+set set::operator*(const set& rhs) const{
+    set result;
+    for (int i = 0; i<DOMAIN; ++i){
+        result.element[i] = element[i] && rhs.element[i];
+    }
+    return result;
+}
+//difference
+set set::operator-(const set& rhs) const{
+    set result;
+    for (int i = 0; i<DOMAIN; ++i){
+        result.element[i] = element[i] && !rhs.element[i];
+    }
+    return result;
+}
+
+set operator+(int lhs, const set& rhs){
+return set(lhs)+ rhs;
+}
+
+set operator*(int lhs, const set& rhs){
+return set(lhs)* rhs;
+}
+set operator-(int lhs, const set& rhs){
+return set(lhs)- rhs;
+}
+
+bool set::operator==(const set& rhs) const {
+    for (int i= 0; i<DOMAIN; ++i){
+        if(element[i] != rhs.element[i]) return false;
+   }
+ return true;
+}
+
+bool set::operator<=(const set& rhs) const{
+    for(int i = o; i< DOMAIN; ++i){
+        if(element[i] && !rhs.elemt[i]) return false;
+    }
+    return true;
+}
+
+bool operator == (int lhs,const set& rhs) {
+    return set(lhs) == rhs;
+}
+bool operator != (instlhs,const set& rhs) {
+    return !(set(lhs) == rhs);
+}
+
+bool operator<=(int lhs, const set& rhs){
+    return set(lhs) <= rhs;
+}
+
+bool operator < (int lhs,const set& rhs) {
+    return !(lhs <= rhs);
+}
+bool operator>=(const set& lhs, const set& rhs){
+    return rhs<=lhs;
+bool operator > (int lhs,const set& rhs) {
+    return rhs < lhs;
+}
+
+std::ostream& operator<<(std::ostream& out, const set& rhs) {
+    out << "{";
+    bool printCommma = false;
+    for(int i= 0; i<DOMAIN; ++i){
+        if(rhs[i]{
+            if(printComma) out << ",";
+            printComma = true;
+            out<<i;
+        }
+    }
+
+    out << "}";
+    return out;
+}
+

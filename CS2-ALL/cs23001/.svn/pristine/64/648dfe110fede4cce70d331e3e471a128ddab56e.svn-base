@@ -1,0 +1,21 @@
+#ifndef OBJECT_HPP_
+#define OBJECT_HPP_
+
+#include<iostream>
+
+
+
+class Student{
+    public:
+    Student();
+    Student(const char[], const int);
+    ~Student();
+    Student(const String&);
+    Student& operator=(const String&);
+
+    private:
+    char *name;
+    int size;
+};
+
+#endif
