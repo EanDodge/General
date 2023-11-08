@@ -14,7 +14,7 @@ int main()
     const char *name = "Shared Memory";
     const char *fillSem = "Full";
     const char *avail = "Available";
-    const char *mutexSem = "Mutex";
+    const char *mutexSem = "Mutex"; //for semaphores open fucntion
     const int SIZE = 2;
     sem_t *fill, *ready, *mutex;
     int shared_memory_file_descriptor;
@@ -39,19 +39,18 @@ int main()
               << std::endl;
     while (loop_count--)
     {
-        std::cout<<"in pro\n";
+        
         sem_wait(ready);
-        std::cout<<"in pro1\n";
-        //sleep(rand()%2+1);
+        sleep(rand()%2+1); //wait to see if it is available, and wait on the mutex lock
         sem_wait(mutex);
-        std::cout<<"in pro2\n";
+
         // limit table size
         if (*buffer < SIZE)
         {
-            (*buffer)++;
+            (*buffer)++; //added an item to the buffer
             std::cout << "Produced an item" << std::endl;
-            sem_post(mutex);
-            sem_post(fill);
+            sem_post(mutex); 
+            sem_post(fill); // send that semaphore is open
 
             if (*buffer == SIZE)
             {
@@ -66,7 +65,7 @@ int main()
     // Close and unlink semaphores Remove Shared memory
     sem_close(fill);
     sem_close(ready);
-    sem_close(mutex);
+    sem_close(mutex);       //once you open, need to close
     sem_unlink(fillSem);
     sem_unlink(avail);
     sem_unlink(mutexSem);

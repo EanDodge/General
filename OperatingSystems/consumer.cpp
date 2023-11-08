@@ -13,7 +13,7 @@ int main()
 {
     const char *name = "Shared Memory";
     const char *fillSem = "Full";
-    const char *avail = "Available";
+    const char *avail = "Available"; //for semaphores open functions
     const char *mutexSem = "Mutex";
     const int SIZE = 2;
     sem_t *fill, *ready, *mutex;
@@ -44,8 +44,8 @@ int main()
 
         (* buffer)--;
         sem_post(mutex);
-        std::cout << "consumed an item\n";
-        sem_post(ready);
+        std::cout << "consumed an item\n"; //take item out of buffer
+        sem_post(ready); //send that semephore is open
     }
     
     std::cout << "limit " << *buffer << " left\n";
@@ -55,7 +55,7 @@ int main()
     sem_close(fill);
     sem_close(ready);
     sem_close(mutex);
-    sem_unlink(fillSem);
+    sem_unlink(fillSem); //once you open, you need to close
     sem_unlink(avail);
     sem_unlink(mutexSem);
 
