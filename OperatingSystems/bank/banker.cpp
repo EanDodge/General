@@ -8,8 +8,8 @@ int main()
     // P0, P1, P2, P3, P4 are the Process names here
  
   
-  int n = 5; // Number of processes
-  int m = 3; // Number of resources
+  const int n = 5; // Number of processes
+  const int m = 3; // Number of resources
   int alloc[5][3] = { { 0, 1, 0 }, // P0 // Allocation Matrix
                      { 2, 0, 0 }, // P1
                      { 3, 0, 2 }, // P2
