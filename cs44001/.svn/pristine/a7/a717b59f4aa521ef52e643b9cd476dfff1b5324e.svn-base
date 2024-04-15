@@ -1,0 +1,184 @@
+// demonstrates state design pattern
+// Mikhail Nesterenko
+// 2/23/2014
+
+#include <iostream>
+#include <string>
+using std::cin; using std::cout; using std::endl; using std::string;
+
+class State;
+// context
+class Process{
+public:
+   Process();
+
+   // behaviors
+   void suspend();
+   void exit();
+   void block();
+   void unblock();
+   void dispatch();
+   string report();
+
+   // part of implementation of state pattern
+   void changeState(State* state){state_=state;}
+private:
+   State* state_;
+};
+
+// absract state
+class State{
+public:
+   State() {};
+   virtual void block(Process*) {};
+   virtual void unblock(Process*) {};
+   virtual void suspend(Process*) {};
+   virtual void exit(Process*) {};
+   virtual void dispatch(Process*) {}; 
+   virtual string report() =0;
+   void changeState(Process* c, State* s){
+      c->changeState(s);
+   }
+};
+
+class Ready: public State{
+public:
+   static State* instance(){
+      static State* onlyInstance = new Ready;
+      return onlyInstance;
+   }
+   void block(Process*) override;
+   void unblock(Process*) override;
+   void suspend(Process*) override;
+   void exit(Process*) override;
+   void dispatch(Process*) override;
+   
+   string report() override {return "Ready";}
+private:
+   // here and elsewhere should be stated private constructor/assignment
+   // to correctly implement singleton, skipped to simplify code
+};
+
+
+class Blocked: public State{
+public:
+   static State* instance(){
+      static State* onlyInstance = new Blocked;
+      return onlyInstance;
+   }
+   void block(Process*) override;
+   void unblock(Process*) override;
+   void suspend(Process*) override;
+   void exit(Process*) override;
+   void dispatch(Process*) override;   
+   string report() override {return "Blocked";}
+};
+
+
+class Running: public State{
+public:
+   static State* instance(){
+      static State* onlyInstance = new Running;
+      return onlyInstance;
+   }   
+   void block(Process*) override;
+   void unblock(Process*) override;
+   void suspend(Process*) override;
+   void exit(Process*) override;
+   void dispatch(Process*) override;
+   string report() override {return "Running";}
+};
+
+//    void suspend();
+//    void exit();
+//    void block();
+//    void unblock();
+//    void dispatch();
+// state transitions member functions
+// Ready
+/////////////////////////////////////
+void Ready::suspend(Process *c) {
+    //changeState(c, Dead::instance());
+} 
+void Ready::exit(Process *c) {
+    //changeState(c, Hungry::instance());
+} 
+void Ready::block(Process *c) {
+    //changeState(c, Dead::instance());
+} 
+void Ready::unblock(Process *c) {
+    //changeState(c, Dead::instance());
+} 
+void Ready::dispatch(Process *c) {
+    changeState(c, Running::instance());
+} 
+//////////////////////////////////////
+// Running
+void Running::suspend(Process *c) {
+    changeState(c, Ready::instance());
+} 
+void Running::exit(Process *c) {
+    //changeState(c, Hungry::instance());
+   delete c;
+} 
+void Running::block(Process *c) {
+    changeState(c, Blocked::instance());
+} 
+void Running::unblock(Process *c) {
+    //changeState(c, ::instance());
+} 
+void Running::dispatch(Process *c) {
+    //changeState(c, Dead::instance());
+} 
+//////////////////////////////////////
+//Blocked
+void Blocked::suspend(Process *c) {
+    //changeState(c, Ready::instance());
+} 
+void Blocked::exit(Process *c) {
+    //changeState(c, Hungry::instance());
+   
+} 
+void Blocked::block(Process *c) {
+    //changeState(c, Blocked::instance());
+} 
+void Blocked::unblock(Process *c) {
+    //changeState(c, ::instance());
+} 
+void Blocked::dispatch(Process *c) {
+    //changeState(c, Dead::instance());
+} 
+// Character member functions
+Process::Process(){state_= Ready::instance();}
+
+// handles/behaviors
+void Process::block(){   state_->block(this);}
+void Process::unblock(){ state_->unblock(this);}
+void Process::dispatch(){state_->dispatch(this);}
+void Process::exit(){    state_->exit(this);}
+void Process::suspend(){ state_->suspend(this);}
+string Process::report(){return state_->report();}
+
+int main(){
+   Process zork;
+   cout << "Zork is " << zork.report() << endl;
+
+   while(zork.report() != "dead"){
+      cout << "What would you like Zork to do? Eat or skip lunch? [e/s] ";
+      char action; cin >> action;
+      if(action == 'e')
+	   zork.dispatch();
+      else
+	   zork.block();
+      cout << "Zork is " << zork.report() << endl;
+   }
+
+   
+   // demonstrates that two Characters 
+   // may be in two different states
+   Process grue;
+   cout << "Zork is " << zork.report() << " while "
+        << "Grue is " << grue.report() << endl;
+   
+}
+

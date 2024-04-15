@@ -1,0 +1,201 @@
+// hashmap test file
+// Mikhail Nesterenko,  Tsung-Heng Wu
+// 3/6/2024
+
+#include "hashmap.hpp"
+//#include <iostream>
+#include <string>
+#include <cassert>
+
+using std::string;
+
+int main() {
+
+   //
+   // <int, int> hashmap test
+   //
+   hashmap<int, int> myHash;
+   
+   // test inserts
+   pair<const pair<const int, int>*, bool> result;
+
+   result = myHash.insert(make_pair(4, 40));
+   assert(result.second);
+   assert(result.first->first == 4);
+   assert(result.first->second == 40);
+
+   result = myHash.insert(make_pair(105, 1050));
+   assert(result.second);
+   assert(result.first->first == 105);
+   assert(result.first->second == 1050);
+
+   result = myHash.insert(make_pair(6, 60));
+   assert(result.second);
+   assert(result.first->first == 6);
+   assert(result.first->second == 60);
+
+   result = myHash.insert(make_pair(107, 1070));
+   assert(result.second);
+   assert(result.first->first == 107);
+   assert(result.first->second == 1070);
+
+   result = myHash.insert(make_pair(90, 900));
+   assert(result.second);
+   assert(result.first->first == 90);
+   assert(result.first->second == 900);
+
+   result = myHash.insert(make_pair(95, 950));
+   assert(result.second);
+   assert(result.first->first == 95);
+   assert(result.first->second == 950);
+
+   result = myHash.insert(make_pair(6, 70)); // insert with a duplicate key
+   assert(!result.second);
+   assert(result.first->first == 6);
+   assert(result.first->second == 60);
+
+
+   // searching map
+   // x will have type hashmap<int, int>::value_type*
+   auto x = myHash.find(4);
+   assert(x != nullptr);
+   assert(x->second == 40);
+
+   x = myHash.find(5);
+   assert(x == nullptr);
+
+
+   // test deletes
+   result = myHash.erase(4); // delete with next element in same bucket
+   assert(result.second);
+   assert(result.first->first == 105);
+   assert(result.first->second == 1050);
+
+   result = myHash.erase(107); // delete the last element in a bucket
+   assert(result.second);
+   assert(result.first->first == 90);
+   assert(result.first->second == 900);
+
+   result = myHash.erase(6);
+   assert(result.second);
+   assert(result.first->first == 90);
+   assert(result.first->second == 900);
+
+   result = myHash.erase(105);                     
+   assert(result.second);
+   //assert(result.first == nullptr);
+   assert(result.first->first == 90);
+   assert(result.first->second == 900);
+
+
+   result = myHash.erase(95); // erase the last element in the container
+   assert(result.second);    
+   //assert(result.first == nullptr);
+
+
+   result = myHash.erase(90); // erased all elements in container
+   assert(result.second);
+   assert(result.first == nullptr);
+
+   result = myHash.erase(5); // erase key not in container
+   assert(!result.second);
+   // first is unspecified
+
+
+   //
+   // <integer, string> hashmap test
+   //
+   hashmap<int, string> employees;
+   
+   // add tests for insert using the <integer, string> hashmap
+
+   auto myResult = employees.insert(make_pair(4, "hello"));
+   assert(myResult.second);
+   assert(myResult.first->first == 4);
+   assert(myResult.first->second == "hello");
+
+   myResult = employees.insert(make_pair(100, "hello"));
+   assert(myResult.second);
+   assert(myResult.first->first == 100);
+   assert(myResult.first->second == "hello");
+
+   myResult = employees.insert(make_pair(2, "ur fired already"));
+   assert(myResult.second);
+   assert(myResult.first->first == 2);
+   assert(myResult.first->second == "ur fired already");
+
+   myResult = employees.insert(make_pair(50, "u are mine"));
+   assert(myResult.second);
+   assert(myResult.first->first == 50);
+   assert(myResult.first->second == "u are mine");
+
+   myResult = employees.insert(make_pair(123, "you are now my ELITE employee"));
+   assert(myResult.second);
+   assert(myResult.first->first == 123);
+   assert(myResult.first->second == "you are now my ELITE employee");
+
+   myResult = employees.insert(make_pair(62, "you are now my employee"));
+   assert(myResult.second);
+   assert(myResult.first->first == 62);
+   assert(myResult.first->second == "you are now my employee");
+   // add tests for find using the <integer, string> hashmap
+
+//     auto x = myHash.find(4);
+//    assert(x != nullptr);
+//    assert(*(x->second) == "hello");
+   // add tests for erase using the <integer, string> hashmap
+    myResult = employees.erase(4);
+   assert(myResult.second);
+   //cout << myResult.first->first;
+   assert(myResult.first->first == 123);
+   
+   //assert(myResult.first->second == "hello");
+
+   myResult = employees.erase(100);
+   assert(myResult.second);
+   assert(myResult.first->first == 2);
+   assert(myResult.first->second == "ur fired already");
+
+   myResult = employees.erase(2);
+   assert(myResult.second);
+   //cout << myResult.first->first;
+   /*
+   assert(myResult.first->first == 50);
+   assert(myResult.first->second == "u are mine");
+
+   myResult = employees.erase(50);
+   assert(myResult.second);
+   assert(myResult.first->first == 123);
+   assert(myResult.first->second == "you are now my ELITE employee");
+
+   myResult = employees.erase(123);
+   assert(myResult.second);
+   assert(myResult.first->first == 62);
+   assert(myResult.first->second == "you are now my employee");
+
+//    myResult = employees.erase(62);
+//    assert(myResult.second);
+//    assert(myResult.first->first == nullptr);
+
+   // add tests for [] operator using the <integer, string> hashmap
+    employees.insert(make_pair(62, "you are now my employee"));
+    assert("you are now my employee" == employees[62]);
+   // add tests for rehash
+    employees.rehash(2);
+    employees.rehash(200);
+
+   // check the hashmap is still correct and all operations still work after rehash
+    myResult = employees.insert(make_pair(123, "you are now my ELITE employee"));
+   assert(myResult.second);
+   assert(myResult.first->first == 123);
+   assert(myResult.first->second == "you are now my ELITE employee");
+
+myResult = employees.erase(123);
+   assert(myResult.second);
+    assert(myResult.first->first == 62);
+   assert(myResult.first->second == "you are now my employee");
+
+    std::cout << "Tests passed" << std::endl;
+    */
+    
+}

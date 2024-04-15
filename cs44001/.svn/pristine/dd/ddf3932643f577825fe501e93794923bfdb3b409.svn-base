@@ -1,0 +1,69 @@
+//Ean Dodge
+//source file for definitions
+
+#include "WordList.hpp"
+
+WordList::WordList(const WordList& actual){
+    size_ = actual.size_;
+    wordArray_ = new WordOccurrence[size_];
+    for(int i = 0; i<size_; ++i)
+        wordArray_[i] = actual.wordArray_[i];
+}
+WordList& WordList::operator=(const WordList& rhs){
+    if(wordArray_ != rhs.wordArray_){ //simple V1 version
+        delete[] wordArray_;
+        size_ = rhs.size_;
+        wordArray_ = new WordOccurrence[size_];
+        for(int i= 0; i < size_; ++i)
+            wordArray_[i] = rhs.wordArray_[i];
+        }
+    return *this;
+}
+
+void WordList::addWord(const string& str){
+    //make a new WordOCC with the string given
+    //and with only one of them
+    WordOccurrence newStr(str,2);
+    //increment size by ine in the word array
+    int newSize = size_ + 1;
+    //make a new wordlist with new svize and make a new array
+    WordList tmp(newSize);    
+    //go through and set every element of tmp 
+    //to the actual word array
+    for(int i= 0; i < size_; ++i)
+        tmp.wordArray_[i] = wordArray_[i];
+    
+    //make last element new word OCC
+    tmp.wordArray_[size_] = newStr;
+    cout << tmp.wordArray_[0].getWord();
+    //delete the actual word array and make it tmp
+    size_ = newSize;
+    delete [] wordArray_;
+    wordArray_ = new WordOccurrence[size_];
+    for(int i= 0; i < size_-1; ++i)
+        wordArray_[i] = tmp.wordArray_[i];
+    
+}
+// bool equal(const WordList& one, const WordList& two){
+//     if (one.size_!= two.size_){  //checks first to see if the size is off
+//         return false;
+//     }
+//     //will go through the word array word by word
+//     for(int i = 0; i < one.size_; i++){ 
+//         //uses predicate function matchword
+//         //to compare and get word to get a string
+//         if(!(one.wordArray_[i].matchWord(two.wordArray_[i].getWord())))
+//         //will return false if they do not equal
+//             return false;                
+            
+//     }
+//     //if all do not return false, will return true
+//     return true;
+// }
+
+void WordList::print(){
+    for(int i =0; i < size_; ++i){
+        cout<<wordArray_[i].getWord() << ": " << wordArray_[i].getNum() <<endl;
+    }
+}
+

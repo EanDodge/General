@@ -1,0 +1,22 @@
+#include "logger.hpp"
+
+
+void makePrint(Logger* rhs);
+
+void addpunc();
+
+int main(){
+    srand(time(nullptr));
+    Logger* v1 = Logger::instance();
+
+    v1->report("HELPPPPP!!!!!!!!!!!!!!!!!!!!!");
+}
+
+void makePrint(Logger* rhs){
+    string result;
+    for(int i = 0; i < 100; ++i){
+        char ran = (char)rand() %49;
+        result.push_back(ran);
+    }
+    rhs->report(result);
+}

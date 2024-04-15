@@ -1,0 +1,93 @@
+// Ean Dodge
+// kent state
+// CS3 with Dr. Nesterenko
+// Lab1
+
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using std::cout;
+using std::endl;
+using std::ifstream;
+using std::string;
+
+void printError(const string, const string, int, const int);
+
+int main(int argc, char *argv[])
+{
+    const int offsetSingle = 5;
+    const int offsetTens = 6;
+    int lineNumber = 1;
+    ifstream fin1;
+    ifstream fin2;
+    fin1.open(argv[1]); // open both files
+    fin2.open(argv[2]);
+    const string fileName = argv[1];
+    const int fileNameLength = fileName.length(); // get length, this is for printing carrot
+    if (argc < 3)
+    {
+        cout << "error, not enough arguments in command line" << endl;
+        exit(1);
+    }
+
+    if (fin1.fail())
+    { // made to exit program if file 1 not found
+        cout << "failed to open file 1" << endl;
+        exit(1);
+    }
+    if (fin2.fail())
+    { // made to exit program if file 2 not found
+        cout << "failed to open file 2" << endl;
+        exit(1);
+    }
+    else
+    {
+        while (!fin1.eof() && !fin2.eof())
+        {
+            string line1;
+            string line2;
+            if (!fin1.eof())
+                getline(fin1, line1);
+            if (!fin2.eof())
+                getline(fin2, line2);                                                    // get line will get the line from the file if its not the end of file
+            int len = line1.length() > line2.length() ? line1.length() : line2.length(); // ternary operator to find
+                                                                                         // how many indexies to go through
+            // for (int i = 0; i < len; ++i ){
+            // if(i == line1.length() + 1){line1.push_back(' ');}  //use if you want a carrot under every 
+            // if(i == line2.length() + 1){line2.push_back(' ');}  //different character
+            bool good = true;
+            int i = 0;
+            while (good && i < len)
+            {
+                if (line1[i] != line2[i])
+                {
+                    int j = 0;
+                    j = i;
+                    good = false;
+
+                    if (lineNumber < 10)
+                    {
+                        j += offsetSingle;   //j += offsetsINGLE += filename
+                        j += fileNameLength; // j = j + (offset = offset + filename)
+                        string spaceString(j, ' ');
+                        cout << argv[1] << ": " << lineNumber << ": " << line1 << endl;
+                        cout << argv[2] << ": " << lineNumber << ": " << line2 << endl;
+                        cout << spaceString << "^" << endl;
+                    }
+                    else
+                    {
+                        j += offsetTens;
+                        j += fileNameLength;
+                        string spaceString(j, ' ');
+                        cout << argv[1] << ": " << lineNumber << ": " << line1 << endl;
+                        cout << argv[2] << ": " << lineNumber << ": " << line2 << endl;
+                        cout << spaceString << "^" << endl;
+                    }
+                }
+                ++i; //comment out if you use the for loop
+            }
+            ++lineNumber;
+        }
+    }
+}

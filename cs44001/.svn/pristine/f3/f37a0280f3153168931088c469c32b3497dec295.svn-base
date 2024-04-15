@@ -1,0 +1,120 @@
+// node class tempate used to contruct lists
+// Mikhail Nesterenko
+// 5/01/00
+
+#ifndef LIST_HPP_
+#define LIST_HPP_
+template<typename T>
+class node;
+
+template<typename T>
+class Collection{
+public:
+  Collection(const Collection<T>&);
+  ~Collection();
+  void swap(Collection<T>&);
+  Collection<T>& operator= (Collection<T> rhs){ swap(rhs); return *this;};
+  void add(const T& item);
+  void remove(const T& item);
+  T last() const;
+  void print();
+  friend bool equal(const Collection&, const Collection&);
+
+private:
+  node<T> *list_;
+};
+
+// the pointer part of every list is the same
+// lists differ by data part
+template <typename T>
+class node{
+public:
+
+  node(): next_(nullptr) {}
+  node(const T item) : data_(item), next_(nullptr) {}
+  // functions can be inlined
+  T getData() const {return data_;}
+  void setData(const T& data){data_=data;}
+
+  // or can be defined outside
+  node<T>* getNext() const;
+  void setNext(node<T> *const);
+
+private:
+  T data_;
+  node<T> *next_;
+};
+
+//
+// member functions for node
+//
+template <typename T>
+node<T>* node<T>::getNext() const {
+  return next_;
+}
+
+template<typename T>
+void node<T>::setNext(node<T> *const next){
+  next_=next;
+}
+
+template<typename T>
+void Collection<T>::add(const T& item){
+    node<T> *temp = new node<T>(item);
+    *list_.setNext(temp);
+    temp = list_;
+}
+
+template<typename T>
+void Collection<T>::remove(const T& item){
+
+}
+template<typename T>
+T Collection<T>::last() const{
+
+};
+template<typename T> 
+void Collection<T>::print(){
+
+};
+
+template<typename T>
+bool equal(const Collection<T>&, const Collection<T>&){
+  
+}
+
+template <typename T>
+Collection<T>::~Collection(){
+    node<T> *temp = 0;
+    while(list_ != 0){
+        temp = list_;
+        list_ = list_->next_;
+        delete temp;
+    }
+}
+
+template <typename T>
+Collection<T>::Collection(const Collection<T> &actual) : Collection<T>() { //copy constructor
+    node<T> *temp = actual.list_;
+    node<T> *bottom;
+    while (temp != 0){
+        if (list_ == 0){
+            list_ = new node<T>(temp -> data_);
+            bottom = list_;
+        }else{
+            bottom->next_ = new node<T>(temp->data_);
+            bottom = bottom->next;
+        }
+        temp = temp->next_;
+    }
+}
+
+template <typename T>
+void Collection<T>::swap(Collection<T> &rhs){
+    node<T> *temp = list_;
+    list_ = rhs.list_;
+    rhs.list_ = temp;
+}
+
+#endif // LIST_HPP_
+

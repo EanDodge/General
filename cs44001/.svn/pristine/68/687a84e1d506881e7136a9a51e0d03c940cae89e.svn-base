@@ -1,0 +1,21 @@
+//Ean Dodge
+//CS3 
+//Lab2
+//Dr. Nesterenko
+
+#include "wordList.hpp"
+
+int main(int argc, char *argv[]){
+    ifstream fin;
+    fin.open(argv[1]);
+
+    if (argc < 2){
+        cout<<"error, there are no files" <<endl;
+        exit(1);
+    }
+    if (argc > 2){
+        cout << "error, there are to many arguments" << endl;
+        exit(1);
+    }
+    
+}

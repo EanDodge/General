@@ -1,0 +1,41 @@
+//Ean Dodge
+//CS3 
+//Lab2
+//Dr. Nesterenko
+
+#include "WordList.hpp"
+//#include "wordListDefinitions.cpp"
+int main(int argc, char *argv[]){
+    ifstream fin;
+    fin.open(argv[1]);
+    if(fin.fail()){
+        cout<<"error, failed to open file"<<endl;
+        exit(1);
+    }
+    if (argc < 2){
+        cout<<"error, there are no files" <<endl;
+        exit(1);
+    }
+    if (argc > 2){
+        cout << "error, there are to many arguments" << endl;
+        exit(1);
+    }
+    WordOccurrence one ("hello", 1);
+    cout << one.getNum();
+    one.increment();
+    cout << one.getNum()<<endl;
+
+
+    WordList two;
+    two.addWord("hello");
+    two.addWord("ball");
+    two.print();
+
+    /*
+    char token = '';
+    fin.get(token);
+    while (!ispunct(token)){
+
+    }
+    */
+}

@@ -1,0 +1,125 @@
+// needed for lab
+// Mikhail Nesterenko
+// 3/18/2022
+
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include "CarFactory.hpp"
+
+using std::vector;
+using std::cout; using std::endl;
+
+class CarLot{
+public:
+   CarLot();
+   Car *testDriveCar(){return car4sale_;}
+   int& lotsize() {return lotsize_;}; //ensures lotsize() = 5;
+   void nextCar(int id);
+   // if a car is bought, requests a new one
+   Car *buyCar(){ 
+      Car *bought = car4sale_;
+      car4sale_ = 
+        factories_[rand()%factories_.size()]->requestCar();
+      return bought;
+   }
+		     
+private:
+   int lotsize_ = 8;
+   Car *car4sale_; // single car for sale at the lot
+   vector<CarFactory *> factories_;
+};
+
+
+CarLot::CarLot(){
+   // creates 2 Ford factories and 2 Toyota factories 
+   factories_.push_back(new FordFactory());   
+   factories_.push_back(new ToyotaFactory());
+   factories_.push_back(new FordFactory());
+   factories_.push_back(new ToyotaFactory());
+
+   // gets the first car for sale
+   car4sale_ = factories_[rand() % factories_.size()] -> requestCar();
+}
+
+
+
+CarLot *carLotPtr = nullptr; // global pointer instantiation
+
+
+// test-drives a car
+// buys it if Toyota
+bool toyotaLover(int id, Car* toBuy){
+   if (carLotPtr == nullptr)
+      carLotPtr = new CarLot();  //filled with two fords, two toyotas
+
+   //Car *toBuy = carLotPtr -> testDriveCar(); //random ford or toyatoa
+
+   cout << "Jill Toyoter" << id << endl;
+   cout << "test driving " 
+	<< toBuy->getMake() << " "
+	<< toBuy->getModel();
+
+   if (toBuy->getMake() == "Toyota"){
+      cout << " love it! buying it!" << endl;
+      carLotPtr -> buyCar();  //get a new car to sell
+      return true;
+   } else{
+      cout << " did not like it!" << endl;
+      return false;
+   }
+}
+
+// test-drives a car
+// buys it if Ford
+bool fordLover(int id, Car* toBuy){
+   if (carLotPtr == nullptr)
+      carLotPtr = new CarLot();
+
+   //Car *toBuy = carLotPtr -> testDriveCar();
+   
+   cout << "Jack Fordman " << id << endl;
+   cout << " test driving "
+	<< toBuy->getMake() << " "
+        << toBuy->getModel();
+   
+   if (toBuy->getMake() == "Ford"){
+      cout << " love it! buying it!" << endl;
+      carLotPtr -> buyCar();
+      return true;
+   } else{
+      cout << " did not like it!" << endl;
+      return false;
+   }
+}
+void CarLot::nextCar(int id){ //will let the person go through every car if needed till they like it
+   vector<Car*> lot;
+   for(int i = 0; i < lotsize(); ++i){
+      lot.push_back(factories_[rand() % factories_.size()] -> requestCar());
+   }
+   for(int i = 0; i < lotsize(); ++i){
+      if(rand()% 2 == 0)
+	      if(toyotaLover(id, lot[i])) return;
+      else
+	      if(fordLover(id, lot[i])) return;
+   }
+}
+
+
+
+int main() {
+   srand(time(nullptr));
+
+   const int numBuyers=20;
+   // for(int i=0; i < numBuyers; ++i)
+   //    if(rand()% 2 == 0)
+	//  toyotaLover(i);
+   //    else
+	//  fordLover(i);
+   CarLot Dodge;
+   for(int i= 0; i < numBuyers; ++i)
+      Dodge.nextCar(i);
+
+  
+}
+
